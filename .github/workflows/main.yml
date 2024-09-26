@@ -25,11 +25,13 @@ jobs:
       #     GH_TOKEN=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 
       #     gh auth login --with-token 
       #     unset GH_TOKEN
-      - name: Authenticate GitHub CLI
+      - name: Configure npm to use GitHub token for private packages
         env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}  # GitHub token stored in secrets
+          GH_TOKEN: ${{ secrets.GH_TOKEN }} # GitHub token from secrets
         run: |
-          gh auth login --with-token
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.GH_TOKEN }}" >> ~/.npmrc
+          echo "@dhuntleypro:registry=https://npm.pkg.github.com" >> ~/.npmrc
+    
 
   
         # gh auth login --with-token
