@@ -165,7 +165,7 @@ jobs:
       - name: Create App (if necessary)
         if: env.APP_EXISTS == 'false'
         run: |
-          bundle exec fastlane produce --app_identifier ${APP_IDENTIFIER}
+          bundle exec fastlane produce --app_identifier com.dhuntleyinc.baseexpoapp
           gh secret set APP_CREATED -b "true" -R ${{ github.repository }}
         env:
           FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
