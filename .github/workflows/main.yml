@@ -87,8 +87,13 @@ jobs:
           SECRET_VALUE: $MATCH_PASSWORD
         run: |
           gh secret set MATCH_PASSWORD -b "$SECRET_VALUE" -R $GITHUB_REPOSITORY
-
-
+                 
+      - name: Add GitHub Secrets 9
+        env:
+          GH_TOKEN: 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
+          SECRET_VALUE: false
+        run: |
+          gh secret set APP_CREATED -b "$SECRET_VALUE" -R $GITHUB_REPOSITORY
 
   build:
     runs-on: macos-latest
@@ -102,7 +107,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '16'
+          node-version: '18'
           registry-url: https://registry.npmjs.org
 
       # Step 3: Configure npm to use GitHub token for private packages
@@ -125,29 +130,28 @@ jobs:
       - name: Install Fastlane
         run: gem install fastlane
 
-      # Step 7: Check if the app already exists in App Store Connect
-      - name: Check if App Exists
-        id: check_app
+      # Step 7: Check if the app has already been created (via GitHub secret)
+      - name: Check if App is Created
+        id: check_app_created
         run: |
-          if bundle exec fastlane produce --app_identifier com.dhuntleyinc.baseexpoapp; then
-            echo "App already exists"
+          if [ "${{ secrets.APP_CREATED }}" == "true" ]; then
+            echo "App already created."
             echo "APP_EXISTS=true" >> $GITHUB_ENV
           else
-            echo "App does not exist, creating..."
+            echo "App not created."
             echo "APP_EXISTS=false" >> $GITHUB_ENV
           fi
-        env:
-          FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
-          FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
 
-      # Step 8: Create App (if necessary)
+      # Step 8: Create App if not already created
       - name: Create App (if necessary)
         if: env.APP_EXISTS == 'false'
-        run: bundle exec fastlane produce
+        run: |
+          bundle exec fastlane produce --app_identifier ${APP_IDENTIFIER}
+          gh secret set APP_CREATED -b "true" -R ${{ github.repository }}
         env:
           FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
           FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
-          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          APP_IDENTIFIER: ${{ secrets.APP_IDENTIFIER }}
 
       # Step 9: Match Code Signing with Fastlane
       - name: Match Code Signing with Fastlane
@@ -181,7 +185,6 @@ jobs:
           MATCH_GIT_TOKEN: ${{ secrets.MATCH_GIT_TOKEN }}
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
-
 
   # build:
   #   runs-on: macos-latest
