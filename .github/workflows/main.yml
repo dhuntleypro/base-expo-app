@@ -32,7 +32,7 @@ jobs:
       # Step 3: Authenticate GitHub CLI using GH_TOKEN
       # This avoids the interactive prompt by passing the GitHub token
       # - name: Authenticate GitHub CLI
-      #   env:
+      #   env:   
       #     GH_TOKEN: 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  # GitHub token stored in secrets
       #   run: |
       #     unset GH_TOKEN
