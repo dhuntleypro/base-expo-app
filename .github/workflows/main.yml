@@ -21,7 +21,9 @@ jobs:
         env:
           GH_TOKEN: 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  # GitHub token stored in secrets
         run: |
-          GH_TOKEN=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 gh auth login --with-token
+          GH_TOKEN=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 
+          gh auth login --with-token 
+          unset GH_TOKEN
   
         # gh auth login --with-token
 
