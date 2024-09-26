@@ -1,0 +1,7 @@
+# app_identifier(ENV['APP_IDENTIFIER'])
+# apple_id(ENV['APPLE_ID'])
+
+# itc_team_id(ENV["YOUR_CONNECT_TEAM_ID"])
+
+# team_id(ENV["YOUR_DEV_PORTAL_TEAM_ID"]) # Replace with your Apple Developer Team ID
+ 

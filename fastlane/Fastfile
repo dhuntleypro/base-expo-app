@@ -1,0 +1,1997 @@
+# Fastfile
+default_platform(:ios)
+
+platform :ios do
+  # This lane will create the app on App Store Connect, build, and deploy it
+  desc "Create the app on App Store Connect, build and deploy"
+  lane :deploy_all do
+    # Step 1: Create the app on App Store Connect if it doesn't exist
+    produce(
+      username: "dhuntleypro@icloud.com",  # Your Apple ID email
+      app_identifier: "com.dhuntleyinc.noneexpoapptemplate",  # Bundle ID of your app
+      app_name: "None expo app template",  # Name of your app
+      sku: "noneexpoapptemplate_001",  # Unique SKU for the app
+      platform: "ios",
+      language: "English",  # Language for the app listing
+      team_id: ENV['APPLE_TEAM_ID'],  # Your Apple Developer Team ID
+      skip_itc: false,  # Create the app in App Store Connect
+      skip_devcenter: false  # Create the app in the Developer Portal
+    )
+
+    # Step 2: Handle code signing (no encryption_password needed)
+    match(
+      type: "appstore",
+      readonly: false,
+      git_url: "https://github.com/dhuntleypro/fastlane-match-repo.git",  # GitHub repo storing certificates
+      username: ENV['FASTLANE_USER'],
+      keychain_name: "login.keychain",  # Store the certs in macOS Keychain
+      keychain_password: ENV['FASTLANE_PASSWORD']  # Keychain password (for CI environments)
+    )
+
+    # Step 3: Build the iOS app
+    gym(
+      scheme: "noneexpoapptemplate",
+      export_method: "app-store"  # Build for App Store
+    )
+
+    # Step 4: Upload the build to App Store Connect
+    upload_to_app_store(
+      skip_screenshots: true,  # Skips screenshots during the upload process
+      skip_metadata: true,  # Skips metadata during the upload process
+      automatic_release: false,  # Set to true if you want automatic release
+      app_identifier: "com.dhuntleyinc.noneexpoapptemplate",
+      username: "dhuntleypro@icloud.com"
+    )
+  end
+end
+
+
+
+
+
+
+
+
+
+# # Fastfile
+# default_platform(:ios)
+
+# platform :ios do
+#   # This lane will create the app on App Store Connect, build, and deploy it
+#   desc "Create the app on App Store Connect, build and deploy"
+#   lane :deploy_all do
+#     # Step 1: Create the app on App Store Connect if it doesn't exist
+#     produce(
+#       username: "dhuntleypro@icloud.com",  # Your Apple ID email
+#       app_identifier: "com.mycompany.noneexpoapptemplate",  # Bundle ID of your app
+#       app_name: "None expo app template",  # Name of your app
+#       sku: "noneexpoapptemplate_001",  # Unique SKU for the app
+#       platform: "ios",
+#       language: "English",  # Language for the app listing
+#       team_id: ENV['APPLE_TEAM_ID'],  # Your Apple Developer Team ID
+#       skip_itc: false,  # Create the app in App Store Connect
+#       skip_devcenter: false  # Create the app in the Developer Portal
+#     )
+
+#     # Step 2: Handle code signing (Use encryption_password to avoid prompt)
+#     match(
+#       type: "appstore",
+#       readonly: false,
+#       encryption_password: ENV['MATCH_PASSWORD'],  # Use passphrase from environment variable
+#       git_url: "https://github.com/dhuntleypro/fastlane-match-repo.git",  # GitHub repo storing certificates
+#       username: ENV['FASTLANE_USER'],
+#       keychain_name: "login.keychain",
+#       keychain_password: ENV['FASTLANE_PASSWORD']
+#     )
+
+#     # Step 3: Build the iOS app
+#     gym(
+#       scheme: "noneexpoapptemplate",
+#       export_method: "app-store"  # Build for App Store
+#     )
+
+#     # Step 4: Upload the build to App Store Connect
+#     upload_to_app_store(
+#       skip_screenshots: true,  # Skips screenshots during the upload process
+#       skip_metadata: true,  # Skips metadata during the upload process
+#       automatic_release: false,  # Set to true if you want automatic release
+#       app_identifier: "com.mycompany.noneexpoapptemplate",
+#       username: "dhuntleypro@icloud.com"
+#     )
+#   end
+# end
+
+
+
+
+
+
+
+
+
+
+
+
+# # Fastfile
+# default_platform(:ios)
+
+# platform :ios do
+#   # This lane will create the app on App Store Connect, build, and deploy it
+#   desc "Create the app on App Store Connect, build and deploy"
+#   lane :deploy_all do
+#     # Step 1: Create the app on App Store Connect if it doesn't exist
+#     produce(
+#       username: "dhuntleypro@icloud.com",  # Your Apple ID email
+#       app_identifier: "com.mycompany.noneexpoapptemplate",  # Bundle ID of your app
+#       app_name: "None expo app template",  # Name of your app
+#       sku: "noneexpoapptemplate_001",  # Unique SKU for the app
+#       platform: "ios",
+#       language: "English",  # Language for the app listing
+#       team_id: ENV['APPLE_TEAM_ID'],  # Your Apple Developer Team ID
+#       skip_itc: false,  # Create the app in App Store Connect
+#       skip_devcenter: false  # Create the app in the Developer Portal
+#     )
+    
+#     # Step 2: Handle code signing
+#     match(type: "appstore", readonly: false)  # Fetch App Store certificates and profiles
+
+#     # Step 3: Build the iOS app
+#     gym(scheme: "noneexpoapptemplate", export_method: "app-store")  # Build the app for App Store
+
+#     # Step 4: Upload the build to App Store Connect
+#     upload_to_app_store(
+#       skip_screenshots: true,
+#       skip_metadata: true,
+#       automatic_release: false,  # Set to true if you want automatic release
+#       app_identifier: "com.mycompany.noneexpoapptemplate",
+#       username: "dhuntleypro@icloud.com"
+#     )
+#   end
+# end
+
+
+
+
+
+
+
+
+
+
+
+# # Fastfile
+# default_platform(:ios)
+
+
+# platform :ios do
+#   # This lane will create the app on App Store Connect, build, and deploy it
+#   desc "Create the app on App Store Connect, build and deploy"
+#   lane :deploy_all do
+#     # Step 1: Create the app on App Store Connect if it doesn't exist
+#     produce(
+#       username: "dhuntletpro@icloud.com",  # Your Apple ID email
+#       app_identifier: "com.mycompany.noneexpoapptemplate",  # Bundle ID of your app
+#       app_name: "My New App",  # Name of your app
+#       sku: "noneexpoapptemplate_001",  # Unique SKU for the app
+#       platform: "ios",
+#       language: "English",  # Language for the app listing
+#       team_id: ENV['APPLE_TEAM_ID'],  # Your Apple Developer Team ID
+#       skip_itc: false,  # Create the app in App Store Connect
+#       skip_devcenter: false  # Create the app in the Developer Portal
+#     )
+    
+#     # Step 2: Handle code signing
+#     match(type: "appstore", readonly: false)  # Fetch App Store certificates and profiles
+
+#     # Step 3: Build the iOS app
+#     gym(scheme: "noneexpoapptemplate")  # Build the app using the Xcode scheme
+
+#     # Step 4: Upload the build to App Store Connect
+#     upload_to_app_store  # Automatically upload the app to App Store Connect
+#   end
+# end
+
+
+
+
+# default_platform(:ios)
+
+# desc "Create a Developer Portal and App Store Connect entry"
+# lane :create_app do
+#   app_store_auth  # Authenticate using App Store Connect API Key
+  
+#   produce(
+#     username: "dhuntleypro@icloud.com" , # ENV['FASTLANE_USER'],                # Your Apple ID email
+#     app_identifier: "com.dhuntleyinc.expoapptemplate",  # Replace with your app identifier
+#     app_name: "Expo App Template",                 # Replace with your app's name
+#     sku: "com.dhuntleyinc.expoapptemplate",        # Replace with your app's SKU
+#     platform: "ios",
+#     team_id: "SNW84Q39QZ" # ENV['APPLE_TEAM_ID']                  # Your Apple Developer Team ID
+#   )
+#   UI.message "Create a Developer Portal and App Store Connect entry (3)"
+
+# end
+
+
+
+
+
+
+
+
+
+
+# default_platform(:ios)
+
+# platform :ios do
+#   desc "Deploy the App Store build"
+#   lane :deploy_all do
+#     setup_ci
+#     match(type: "appstore", app_identifier: ["com.dhuntleyinc.expoapptemplate"])
+#     build_app(scheme: "expoapptemplate")
+#     api_key = app_store_connect_api_key(
+#       key_id: ENV['APP_STORE_CONNECT_API_KEY_KEY_ID'],
+#       issuer_id: ENV['APP_STORE_CONNECT_API_KEY_ISSUER_ID'],
+#       key_content: ENV['APP_STORE_CONNECT_P8_BASE64'],
+#       is_key_content_base64: true,
+#       duration: 1200
+#     )
+#     upload_to_testflight(api_key: api_key)
+#   end
+# end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# default_platform(:ios)
+
+# platform :ios do
+#   ios_app_id = 'com.dhuntleyinc.expoapptemplate'
+#   macos_production_id = 'com.dhuntleyinc.expoapptemplate.macos'
+#   git_user_name = 'dhuntleypro'
+#   git_user_email = 'dhuntleypro@icloud.com'
+
+#   desc "Deploy the App Store build"
+#   lane :client_deploy_production_app_store do
+#     setup_ci
+#     match(
+#         type: "appstore",
+#         readonly: true,
+#         app_identifier: [ios_app_id, ios_app_id + ".NotificationServiceExtension"]
+#     )
+#     build_app(scheme: "expoapptemplate")
+#     api_key = app_store_connect_api_key(
+#       key_id: ENV['APP_STORE_CONNECT_API_KEY_KEY_ID'],
+#       issuer_id: ENV['APP_STORE_CONNECT_API_KEY_ISSUER_ID'],
+#       key_content: ENV['APP_STORE_CONNECT_P8_BASE64'],
+#       is_key_content_base64: false,
+#       duration: 1200,
+#       in_house: false
+#     )
+#     upload_to_testflight(api_key: api_key)
+#     sentry_upload_dif(
+#       auth_token: ENV['SENTRY_TOKEN'],
+#       org_slug: 'expoappt_slug',
+#       project_slug: 'expoappt_slug',
+#       include_sources: true
+#     )   
+#   end
+
+#   desc "Deploy the production build for testers"
+#   lane :client_deploy_production_beta do
+#     setup_ci
+#     increment_build_number(build_number: "55555")
+#     match(
+#         type: "appstore",
+#         readonly: true,
+#         app_identifier: [ios_app_id, ios_app_id + ".NotificationServiceExtension"]
+#     )
+#     build_app(scheme: "expoapptemplate")
+#     api_key = app_store_connect_api_key(
+#       key_id: ENV['APP_STORE_CONNECT_API_KEY_KEY_ID'],
+#       issuer_id: ENV['APP_STORE_CONNECT_API_KEY_ISSUER_ID'],
+#       key_content: ENV['APP_STORE_CONNECT_P8_BASE64'],
+#       is_key_content_base64: false,
+#       duration: 1200,
+#       in_house: false
+#     )
+#     upload_to_testflight(api_key: api_key)
+#     sentry_upload_dif(
+#       auth_token: ENV['SENTRY_TOKEN'],
+#       org_slug: 'expoappt_slug',
+#       project_slug: 'example-app-client-ios-production',
+#       include_sources: true
+#     )   
+#   end
+
+#   desc "Deploy the staging build for testers"
+#   lane :client_deploy_staging_beta do
+#     setup_ci
+#     version_increment_patch
+#     version = lane_context[:project_version]
+#     git_setup_user
+#     git_commit_push(message: "New version #{version} prepared for the staging Test Flight")
+#     git_tag_push(tag: version)
+#     match(
+#         type: "appstore",
+#         readonly: true,
+#         app_identifier: [ios_app_id, ios_app_id + ".NotificationServiceExtension"]
+#     )
+#     build_app(scheme: "ClientStaging")
+#     api_key = app_store_connect_api_key(
+#       key_id: ENV['APP_STORE_CONNECT_API_KEY_KEY_ID'],
+#       issuer_id: ENV['APP_STORE_CONNECT_API_KEY_ISSUER_ID'],
+#       key_content: ENV['APP_STORE_CONNECT_P8_BASE64'],
+#       is_key_content_base64: false,
+#       duration: 1200,
+#       in_house: false
+#     )
+#     upload_to_testflight(api_key: api_key)
+#     sentry_upload_dif(
+#       auth_token: ENV['SENTRY_TOKEN'],
+#       org_slug: 'expoappt_slug',
+#       project_slug: 'example-app-client-ios-staging',
+#       include_sources: true
+#     )    
+#   end
+
+#   desc "Deploy the Desktop App Store build"
+#   lane :desktop_deploy_appstore do
+#     setup_ci
+#     match(
+#       type: "appstore", 
+#       app_identifier: macos_production_id,
+#       additional_cert_types: ["mac_installer_distribution"],
+#       platform: "macos",
+#       readonly: true
+#     )
+#     build_mac_app(
+#       scheme: "DesktopProduction",
+#       installer_cert_name: "3rd Party Mac Developer Installer: Darrien Huntley ()"
+#     )
+#     api_key = app_store_connect_api_key(
+#       key_id: ENV['APP_STORE_CONNECT_API_KEY_KEY_ID'],
+#       issuer_id: ENV['APP_STORE_CONNECT_API_KEY_ISSUER_ID'],
+#       key_content: ENV['APP_STORE_CONNECT_P8_BASE64'],
+#       is_key_content_base64: false,
+#       duration: 1200,
+#       in_house: false
+#     )
+#     upload_to_testflight(api_key: api_key)
+#     sentry_upload_dif(
+#       auth_token: ENV['SENTRY_TOKEN'],
+#       org_slug: 'expoappt_slug',
+#       project_slug: 'example-app-client-macos-production',
+#       include_sources: true
+#     )
+#   end
+
+#   desc "Run Tests using Fastlane"
+#   lane :run_all_tests do
+#     setup_ci
+#     match(
+#       type: "development",
+#       readonly: true,
+#       app_identifier: [ios_app_id, ios_app_id + ".NotificationServiceExtension"]
+#     )
+#     run_tests(
+#       scheme: "ClientStaging",
+#       prelaunch_simulator: true,
+#       result_bundle: true,
+#       code_coverage: true,
+#       output_directory: "reports/",
+#       output_types: "html,junit"
+#     )
+#   end
+
+#   desc "Load provision profiles for iOS staging"
+#   lane :load_provision_profiles_ios_staging do
+#     identifiers = [ios_app_id, ios_app_id + '.NotificationServiceExtension']
+#     match(
+#         type: "appstore",
+#         include_all_certificates: true,
+#         readonly: true,
+#         app_identifier: identifiers,
+#         verbose: true
+#     )
+#     # identifiers << ios_app_id + '.ClientUITests'
+#     match(
+#         type: "development",
+#         include_all_certificates: true,
+#         readonly: true,
+#         app_identifier: identifiers,
+#         verbose: true
+#     )
+#   end
+
+#   desc "Load provision profiles for iOS production"
+#   lane :load_provision_profiles_ios_production do
+#     identifiers = [ios_app_id, ios_app_id + '.NotificationServiceExtension']
+#     match(
+#         type: "appstore",
+#         include_all_certificates: true,
+#         readonly: true,
+#         app_identifier: identifiers,
+#         verbose: true
+#     )
+#     match(
+#         type: "development",
+#         include_all_certificates: true,
+#         readonly: true,
+#         app_identifier: identifiers,
+#         verbose: true
+#     )
+#   end
+
+#   desc "Create provision profiles for iOS staging"
+#   lane :create_provision_profiles_ios_staging do
+#     login_another_user
+#     user_name = lane_context[:user_name]
+#     identifiers = [ios_app_id, ios_app_id + '.NotificationServiceExtension']
+#     match(
+#         type: "appstore",
+#         username: user_name,
+#         include_all_certificates: true,
+#         readonly: false,
+#         app_identifier: identifiers,
+#         verbose: true
+#     )
+#     # identifiers << ios_app_id + '.ClientUITests'
+#     match(
+#         type: "development",
+#         username: user_name,
+#         include_all_certificates: true,
+#         readonly: false,
+#         app_identifier: identifiers,
+#         verbose: true
+#     )
+#   end
+
+#   desc "Create provision profiles for iOS production"
+#   lane :create_provision_profiles_ios_production do
+#     login_another_user
+#     user_name = lane_context[:user_name]
+#     identifiers = [ios_app_id, ios_app_id + '.NotificationServiceExtension']
+#     match(
+#         type: "appstore",
+#         username: user_name,
+#         include_all_certificates: true,
+#         readonly: false,
+#         app_identifier: identifiers,
+#         verbose: true
+#     )
+#     match(
+#         type: "development",
+#         username: user_name,
+#         include_all_certificates: true,
+#         readonly: false,
+#         app_identifier: identifiers,
+#         verbose: true
+#     )
+#   end
+
+#   desc "Login another User to Apple ID"
+#   lane :login_another_user do
+#     user_name = UI.input("Enter your Apple id:")
+#     ENV["FASTLANE_USER"] = user_name
+#     ENV["FASTLANE_PASSWORD"] = UI.password("Enter your password:")
+#     lane_context[:user_name] = user_name
+#   end
+
+#   desc "Setup Git User"
+#   lane :git_setup_user do |options|
+#     sh("git config --global user.name '" + git_user_name + "'")
+#     sh("git config --global user.email '" + git_user_email + "'")
+#   end
+
+#   desc "Git Commit & Push"
+#   lane :git_commit_push do |options|
+#     sh("git commit -am '#{options[:message]}'")
+#     sh("git push")
+#   end
+
+#   desc "Create Tag & Push"
+#   lane :git_tag_push do |options|
+#     tag = options[:tag] 
+#     sh("git tag '#{tag}'")
+#     sh("git push origin #{tag}")
+#   end
+
+#   desc "Increment Patch Version"
+#   lane :version_increment_patch do 
+#     project_file = "./../Client.xcodeproj/project.pbxproj"
+#     marketing_version_tag = "MARKETING_VERSION"
+#     # Get the current version from the project file
+#     ### Get all version strings
+#     version_expression_lines_string = `cat #{project_file} | grep #{marketing_version_tag}`
+#     version_expression_lines = version_expression_lines_string.split(/\n/)
+#     version = ""
+#     version_expression = ""
+#     ### Look for the first one with the vesion assigned
+#     ### Not the MARKETING_VERSION = "$(MARKETING_VERSION)";
+#     for line in version_expression_lines
+#       current_version_expression = line.strip
+#       ### If the version is like this: MARKETING_VERSION = 0.1.1;
+#       if version_match = current_version_expression.match(/#{marketing_version_tag} = ([\d.]+)/)
+#         version = version_match[1]
+#         version_expression = current_version_expression;
+#         break
+#       end  
+#     end
+#     if version == ""
+#       # Search failed, raise an exception to fail the lane
+#       UI.user_error!("Failed to find a version in the #{project_file}")
+#       return
+#     end
+#     puts "We found the version: " + version
+
+#     # Get the next version
+#     ### Split the version string into individual components
+#     components = version.split(".")
+
+#     ### Convert the last component to an integer, increment it, and convert it back to a string
+#     last_component = components.last.to_i
+#     new_last_component = last_component + 1
+#     components[-1] = new_last_component.to_s
+
+#     ### Join the components back into a version string
+#     next_version = components.join(".")
+
+#     puts "We prepared the next version: " + next_version
+
+#     # Update the project file 
+#     ### Prepare the replacement for the version expression
+#     ### MARKETING_VERSION = 0.1.2;
+#     next_version_expression = current_version_expression.sub(/\d+\.\d+\.\d+/, next_version)
+
+#     file_contents = File.read(project_file)
+#     ### Replace all occurrences of string1 with string2
+#     updated_contents = file_contents.gsub(current_version_expression, next_version_expression)
+
+#     if file_contents == updated_contents
+#       # Update failed, raise an exception to fail the lane
+#       UI.user_error!("Failed to update the version in the #{project_file}")
+#       return
+#     end
+
+#     ### Write the updated contents back to the file
+#     File.write(project_file, updated_contents)
+
+#     puts "We patch the project file with version expression: '" + next_version_expression + "'"
+
+#     lane_context[:project_version] = next_version
+#     puts "finished"
+#   end
+# end
+
+# platform :mac do
+#   desc "Create provision profiles for MacOS production"
+#   lane :create_provision_profiles_mac_production do
+#     login_another_user
+#     user_name = lane_context[:user_name]
+#     match(
+#       type: "appstore",
+#       username: user_name,
+#       additional_cert_types: 'mac_installer_distribution',
+#       readonly: false,
+#       app_identifier: macos_production_id
+#     )
+#   end
+# end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# lane :flight do |options|
+#   app_store_connect_api_key(
+#     key_id: "HVI5YC18WLLM",
+#     issuer_id: "2edc83fb-4b11-4f97-8bcd-de7a6f07a582",
+#     key_content: options[:apikey],
+#     duration: 1200, # optional (maximum 1200)
+#     in_house: false # optional but may be required if using match/sigh
+#   )
+#   if ENV['CI']
+#     create_keychain(
+#       name: "build",
+#       password: "2547",
+#       default_keychain: true,
+#       unlock: true,
+#       timeout: 3600,
+#       lock_when_sleeps: false
+#     )
+#     sync_code_signing(
+#       readonly: true,
+#       type: "appstore",
+#       keychain_name: "build",
+#       keychain_password: "2547",
+#       shallow_clone: true
+#     )
+#     sh("security find-certificate -a")
+#   else
+#     sync_code_signing(
+#       type: "appstore",
+#       readonly: true
+#     )
+#   end
+#   if "tag" != options[:event]
+#     puts options[:event]
+#     increment_build_number
+#     commit_version_bump(message: "Build version bump")
+#     sh("git push")
+#   end
+#   build_app(scheme: "D-Connect",
+#             workspace: "expoapptemplate.xcworkspace",
+#             export_method: "app-store",
+#             include_bitcode: false)
+#   upload_to_testflight(
+#     skip_submission: true,
+#     skip_waiting_for_build_processing: true
+#   )
+# end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# default_platform(:ios)
+
+# platform :ios do
+#   before_all do
+#     # Ensure environment variables are loaded from .env
+#     dotenv
+#   end
+
+#   desc "Create a Developer Portal and App Store Connect entry"
+#   lane :create_app do
+#     produce(
+#       username: ENV['FASTLANE_USER'],  # Your Apple ID email
+#       app_identifier: "com.dhuntleyinc.expoapptemplate",  # Replace with your app identifier
+#       app_name: "Expo App Template",
+#       sku: "com.dhuntleyinc.expoapptemplate",
+#       platform: "ios",
+#       team_id: ENV['APPLE_TEAM_ID']  # Your Apple Developer Team ID
+#     )
+#   end
+
+#   desc "Build the iOS app"
+#   lane :build do
+#     build_app(
+#       scheme: "Expo App Template",  # Replace with your app's scheme
+#       workspace: "expoapptemplate.xcworkspace"
+#     )
+#   end
+
+#   desc "Upload to TestFlight"
+#   lane :beta do
+#     build
+#     upload_to_testflight(
+#       username: ENV['FASTLANE_USER'],
+#       app_identifier: ENV['APP_IDENTIFIER']
+#     )
+#   end
+
+#   desc "Release to App Store"
+#   lane :release do
+#     build
+#     upload_to_app_store(
+#       username: ENV['FASTLANE_USER'],
+#       app_identifier: ENV['APP_IDENTIFIER']
+#     )
+#   end
+# end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# # Create a Developer Portal and App Store Connect
+# desc "Create a Developer Portal and App Store Connect entry"
+# lane :create_app do
+#   # Step 1: Create app
+#   UI.message "Step 1 completed"
+  
+#   produce(
+#     username: ENV['FASTLANE_USER'],  # Your Apple ID email
+#     app_identifier: "com.dhuntleyinc.expoapptemplate",
+#     app_name: "Expo App Template",
+#     sku: "dhuntleyinc_expoapptemplate_001",
+#     platform: "ios",
+#     language: "English",
+#     team_id: ENV['APPLE_TEAM_ID'],  # Add your Team ID here
+#     skip_itc: false,  # Set to true if you want to skip creating the app in App Store Connect
+#     skip_devcenter: false  # Set to true if you want to skip creating the app in the Developer Portal
+#   )
+# end
+
+# platform :ios do
+#   before_all do
+#     Dotenv.load ".env.ios"
+#     UI.message "Step 2 completed"
+#   end
+
+#   desc "Sync certificates and provisioning profiles from GitHub"
+#   lane :beta do
+#     # Step 3: Get the certificates from GitHub repository or fastlane match repo
+#     get_certificates(
+#       cert_id: "MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgyqVo/lyGgN0sjXV7IdMaba56KvvT1uGEGeo8/1q6jnKhRANCAAQhFuxEKGq+tDN4EO0iIEDb0iPI4LOAiXMOXTMu5vJA6aKv5kVPxoLXl66Y6/CAULD3o8w8r6KfAmNIISmmOE2J",  # Use the certificate ID you want to reuse
+#       keychain_path: "path_to_your_keychain"  # Optional: set if you want to specify a custom keychain path
+#     )
+    
+#     # Step 4: Get provisioning profile
+#     get_provisioning_profile(
+#       app_identifier: ENV['APP_IDENTIFIER']  # Load from the environment
+#     )
+
+#     # Step 5: Build the app
+#     build_app
+#   end
+# end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# # Create a Developer Portal and App Store Connect
+# desc "Create a Developer Portal and App Store Connect entry"
+# lane :create_app do
+#   #create_app_online # produce
+#   UI.message "Step 1 completed"
+ 
+#   produce(
+#     username: ENV['FASTLANE_USER'],  # Your Apple ID email
+#     app_identifier: "com.dhuntleyinc.expoapptemplate",
+#     app_name: "Expo App Template",
+#     sku: "dhuntleyinc_expoapptemplate_001",
+#     platform: "ios",
+#     language: "English",
+#     team_id: ENV['APPLE_TEAM_ID'],  # Add your Team ID here, mandatory if part of multiple teams
+#     skip_itc: false,  # Set to true if you want to skip creating the app in App Store Connect
+#     skip_devcenter: false  # Set to true if you want to skip creating the app in the Developer Portal
+#   )
+# end
+
+# platform :ios do
+#   before_all do
+#     Dotenv.load ".env.ios"
+#     UI.message "Step 2 completed"
+#   end
+
+#   # lane :revoke_certificates do
+#   #   revoke_certificates(
+#   #     development: false,    # Only revoke distribution certificates
+#   #     username: ENV['FASTLANE_USER']
+#   #   )
+#   # end
+  
+#   #   desc "Sync code signing certificates and provisioning profiles"
+#   lane :beta do
+#     get_certificates(
+#       cert_id: "MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgyqVo/lyGgN0sjXV7
+# IdMaba56KvvT1uGEGeo8/1q6jnKhRANCAAQhFuxEKGq+tDN4EO0iIEDb0iPI4LOA
+# iXMOXTMu5vJA6aKv5kVPxoLXl66Y6/CAULD3o8w8r6KfAmNIISmmOE2J" # Use the certificate ID you want to reuse
+#     )
+#        # invokes cert
+#     get_provisioning_profile(
+#       app_identifier: ENV['APP_IDENTIFIER']  # Load from the environment
+#     )   # invokes sigh
+#     build_app
+#   end
+
+# end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#   desc "Sync code signing certificates and provisioning profiles"
+#   lane :signing do
+#     UI.message "Step 3 completed"
+
+#     sync_code_signing # match
+#     # UI.message "Step 4 completed"
+
+#     # sync_code_signing(
+#     #   username: ENV['FASTLANE_USER'],
+#     #   type: "appstore",
+#     #   git_url: "https://#{ENV['MATCH_GIT_TOKEN']}:x-oauth-basic@github.com/your-repo/fastlane-match-repo.git",
+#     #   readonly: false  # Temporarily disable readonly to create certificates
+#     # )
+
+#     # mapping = Actions.lane_context[SharedValues::MATCH_PROVISIONING_PROFILE_MAPPING]
+#     # UI.message "Step 5 completed"
+
+#     # upload_code_signing_settings(
+#     #   profile_name: mapping[ENV['MATCH_APP_IDENTIFIER']]
+#     # )
+#     # UI.message "Step 6 completed"
+#     # match(
+#     #   type: "appstore",
+#     #   app_identifier: ["com.dhuntleyinc.expoapptemplate"],
+#     #   username: ENV["FASTLANE_USER"],
+#     #   git_url: "https://#{ENV['MATCH_GIT_TOKEN']}:x-oauth-basic@github.com/dhuntleypro/fastlane-match-repo.git",
+
+#     #   # git_url: "https://github.com/dhuntleypro/fastlane-match-repo.git",
+#     #   team_id: ENV["APPLE_TEAM_ID"],
+#     #   readonly: false,
+#     #   force: true,
+#     #   keychain_name: "login.keychain",
+#     #   git_basic_authorization: ENV["MATCH_GIT_BASIC_AUTHORIZATION"],
+#     #   # clone_branch_directly: true  # Speed up the clone process
+    
+#     # )
+#     UI.message "Step 4 completed next is build"
+
+#   end
+
+#   desc "Build the iOS binary"
+#   lane :build do
+#     signing  # Sync code signing before building
+#     gym(
+#       scheme: "expoapptemplate",
+#       clean: true,
+#       export_method: "app-store"
+#     )
+#   end
+
+#   desc "Release the app to the App Store"
+#   lane :release do
+#     # build    # Build the app before releasing
+#     # deliver  # Upload the app to the App Store using deliver
+#     build_app(scheme: "expoapptemplate")  # Build your iOS app
+
+#     upload_to_app_store(  # Upload the build to App Store Connect
+#       username: ENV["FASTLANE_USER"],
+#       app_identifier: "com.dhuntleyinc.expoapptemplate",
+#       team_id: ENV["APPLE_TEAM_ID"]
+#     )
+#   end
+# end
+
+# lane :deploy_all do
+#   signing
+#   build
+#   release
+# end
+
+
+
+
+
+
+
+
+
+# # Create a Developer Portal and App Store Connect
+# desc "Create a Developer Portal and App Store Connect entry"
+# lane :create_app do
+#   create_app_online # produce
+# end
+
+# platform :ios do
+#   # Sync signing certificates and provisioning profiles from the git repo
+#   desc "Sync code signing certificates and provisioning profiles"
+#   lane :signing do
+#     sync_code_signing # match
+   
+#     # mapping = Actions.lane_context[
+#     #   SharedValues::MATCH_PROVISIONING_PROFILE_MAPPING
+#     # ]
+#     # upload_code_signing_settings(
+#     #   profile_name: mapping[ENV['MATCH_APP_IDENTIFIER']]
+#     # )
+#   end
+
+#   # Build the iOS app
+#   desc "Build the iOS binary"
+#   lane :build do
+#     signing  # Sync code signing before building
+#     gym      # gym is the default fastlane action to build an iOS app
+#   end
+
+#   # Release the app to the App Store
+#   desc "Release the app to the App Store"
+#   lane :release do
+#     build    # Build the app before releasing
+#     deliver  # Upload the app to the App Store using deliver
+#   end
+# end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# lane :create_app do
+#   produce(
+#     username: ENV['FASTLANE_USER'],  # Your Apple ID email
+#     app_identifier: "com.dhuntleyinc.expoapptemplate",
+#     app_name: "Expo App Template",
+#     sku: "dhuntleyinc_expoapptemplate_001",
+#     platform: "ios",
+#     language: "English",
+#     team_id: ENV['APPLE_TEAM_ID']  # Optional, if you're part of multiple teams
+#   )
+# end
+
+# platform :ios do
+#   desc "Sync code signing certificates and provisioning profiles"
+#   lane :signing do
+#     # sync_code_signing # match
+#     sync_code_signing(
+#       # username: ENV['PRODUCE_USERNAME'],
+#       username: ENV['FASTLANE_USER'],
+#       # password: ENV['FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD'],
+#       type: "appstore",  
+#       git_url: "https://github.com/dhuntleypro/fastlane-match-repo.git", 
+#       readonly: false  # Temporarily disable readonly to create certificates
+#     )
+#     mapping = Actions.lane_context[
+#       SharedValues::MATCH_PROVISIONING_PROFILE_MAPPING
+#     ]
+#     upload_code_signing_settings(
+#       profile_name: mapping[ENV['MATCH_APP_IDENTIFIER']]
+#     )
+
+#     # git_url = "https://#{ENV['MATCH_GIT_TOKEN']}:x-oauth-basic@github.com/dhuntleypro/fastlane-match-repo.git"
+#     # match(type: "appstore", git_url: git_url)
+#   end
+
+
+
+
+
+
+
+# # Create a Developer Portal and App Store Connect
+# desc "Create a Developer Portal and App Store Connect entry"
+# lane :create_app do
+#   produce(
+#     username: ENV['FASTLANE_USER'],  # Your Apple ID email
+#     app_identifier: "com.dhuntleyinc.expoapptemplate",
+#     app_name: "Expo App Template",
+#     sku: "dhuntleyinc_expoapptemplate_001",
+#     platform: "ios",
+#     language: "English",
+#     team_id: ENV['APPLE_TEAM_ID'],  # Add your Team ID here, mandatory if part of multiple teams
+#     skip_itc: false,  # Set to true if you want to skip creating the app in App Store Connect
+#     skip_devcenter: false  # Set to true if you want to skip creating the app in the Developer Portal
+#   )
+#     UI.message "Step 1 Completed "
+
+# end
+
+# platform :ios do
+#   before_all do
+#     Dotenv.load ".env.ios"
+#      UI.message "Step 2 Env File Aquired"
+#   end
+
+#   desc "Sync code signing certificates and provisioning profiles"
+#   lane :signing do
+#     # sync_code_signing # match
+#     sync_code_signing(
+#       username: ENV['FASTLANE_USER'],
+#       type: "appstore",
+#       git_url: "https://#{ENV['MATCH_GIT_TOKEN']}:x-oauth-basic@github.com/your-repo/fastlane-match-repo.git",
+#       readonly: false  # Temporarily disable readonly to create certificates
+#     )
+#     UI.message "Step 3 signing"
+
+#     mapping = Actions.lane_context[SharedValues::MATCH_PROVISIONING_PROFILE_MAPPING]
+    
+#     UI.message "Step 4 mapping"
+
+#     upload_code_signing_settings(
+#       profile_name: mapping[ENV['MATCH_APP_IDENTIFIER']]
+#     )
+
+#     UI.message "Step 5 upload_code_signing_settings"
+
+#   end
+
+#   desc "Build the iOS binary"
+#   lane :build do
+#     signing  # Sync code signing before building
+#     gym      # gym is the default fastlane action to build an iOS app
+#   end
+
+#   desc "Release the app to the App Store"
+#   lane :release do
+#     build    # Build the app before releasing
+#     deliver  # Upload the app to the App Store using deliver
+#   end
+# end
+
+# lane :deploy_all do
+#   create_app
+#   signing
+#   build
+#   release
+# end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# # Create a Developer Portal and App Store Connect
+# desc "Create a Developer Portal and App Store Connect entry"
+# lane :create_app do
+#   create_app_online # produce
+#     produce(
+#     username: ENV['FASTLANE_USER'],  # Your Apple ID email
+#     app_identifier: "com.dhuntleyinc.expoapptemplate",
+#     app_name: "Expo App Template",
+#     sku: "dhuntleyinc_expoapptemplate_001",
+#     platform: "ios",
+#     language: "English",
+#     team_id: ENV['APPLE_TEAM_ID']  # Optional, if you're part of multiple teams
+#   )
+
+# end
+
+# # Create a Developer Portal and App Store Connect entry
+# desc "Create a Developer Portal and App Store Connect entry"
+# lane :create_app do
+#   UI.message "Starting to create App Store Connect and Developer Portal entry..."
+#   produce(
+#     username: ENV['FASTLANE_USER'],  # Your Apple ID email
+#     app_identifier: "com.dhuntleyinc.expoapptemplate",
+#     app_name: "Expo App Template",
+#     sku: "dhuntleyinc_expoapptemplate_001",
+#     platform: "ios",
+#     language: "English",
+#     team_id: ENV['APPLE_TEAM_ID']  # Optional, if you're part of multiple teams
+#   )
+#   UI.success "App Store Connect and Developer Portal entry created successfully!"
+# end
+
+# platform :ios do
+#   before_all do
+#     UI.message "Loading environment variables..."
+#     Dotenv.load ".env.ios"  # Load your .env.ios file for sensitive credentials
+#     UI.success "Environment variables loaded successfully!"
+#   end
+
+#   desc "Sync code signing certificates and provisioning profiles"
+#   lane :signing do
+#     UI.message "Starting to sync code signing certificates and provisioning profiles..."
+#     sync_code_signing(  # Sync code signing using match
+#       username: ENV['FASTLANE_USER'],
+#       type: "appstore",
+#       git_url: "https://#{ENV['MATCH_GIT_TOKEN']}:x-oauth-basic@github.com/your-repo/fastlane-match-repo.git",
+#       readonly: false  # Temporarily disable readonly to create certificates
+#     )
+#     UI.success "Code signing certificates and provisioning profiles synced!"
+#   end
+
+#   desc "Release the app to the App Store"
+#   lane :release do
+#     UI.message "Starting app release process..."
+    
+#     UI.message "Setting up App Store Connect API Key..."
+#     app_store_connect_api_key(
+#       key_id: "HVI5YC18WLLM",           # Replace with your actual key_id
+#       issuer_id: "SNW84Q39QZ",          # Replace with your actual issuer_id
+#       key_filepath: "../ApiKey_HVI5YC18WLLM.p8"  # Correctly provide the path to your .p8 file
+#     )
+#     UI.success "App Store Connect API Key configured!"
+
+#     UI.message "Fetching distribution certificates and provisioning profiles..."
+#     match(type: "appstore")  # Ensure it fetches distribution certificates and profiles
+#     UI.success "Certificates and provisioning profiles fetched!"
+
+#     UI.message "Building the iOS app..."
+#     build_app(  # Build the app using the correct Xcode scheme
+#       scheme: "expoapptemplate",  # Replace with your actual scheme name
+#       export_method: "app-store",  # Ensure app-store export for production builds
+#       clean: true
+#     )
+#     UI.success "iOS app built successfully!"
+
+#     UI.message "Uploading the app to App Store Connect..."
+#     upload_to_app_store(  # Upload to App Store
+#       skip_metadata: false,        # Set to false to fill out metadata
+#       skip_screenshots: true,      # Set to true if you want to skip uploading screenshots
+#       app_version: "1.0.0",        # Adjust the app version accordingly
+#       submit_for_review: true      # Automatically submit the app for review
+#     )
+#     UI.success "App uploaded and submitted for review!"
+#   end
+# end
+
+
+
+
+
+
+
+
+
+
+
+
+
+# # # Create a Developer Portal and App Store Connect
+# # desc "Create a Developer Portal and App Store Connect entry"
+# # lane :create_app do
+# #   create_app_online # produce
+# #     produce(
+# #     username: ENV['FASTLANE_USER'],  # Your Apple ID email
+# #     app_identifier: "com.dhuntleyinc.expoapptemplate",
+# #     app_name: "Expo App Template",
+# #     sku: "dhuntleyinc_expoapptemplate_001",
+# #     platform: "ios",
+# #     language: "English",
+# #     team_id: ENV['APPLE_TEAM_ID']  # Optional, if you're part of multiple teams
+# #   )
+
+# # end
+
+# # Create a Developer Portal and App Store Connect
+# desc "Create a Developer Portal and App Store Connect entry"
+# lane :create_app do
+#   produce(
+#     username: ENV['FASTLANE_USER'],  # Your Apple ID email
+#     app_identifier: "com.dhuntleyinc.expoapptemplate",
+#     app_name: "Expo App Template",
+#     sku: "dhuntleyinc_expoapptemplate_001",
+#     platform: "ios",
+#     language: "English",
+#     team_id: ENV['APPLE_TEAM_ID'],  # Add your Team ID here, mandatory if part of multiple teams
+#     skip_itc: false,  # Set to true if you want to skip creating the app in App Store Connect
+#     skip_devcenter: false  # Set to true if you want to skip creating the app in the Developer Portal
+#   )
+# end
+
+# platform :ios do
+#   before_all do
+#     Dotenv.load ".env.ios"
+#   end
+
+#   desc "Sync code signing certificates and provisioning profiles"
+#   lane :signing do
+#     # sync_code_signing # match
+#     sync_code_signing(
+#       username: ENV['FASTLANE_USER'],
+#       type: "appstore",
+#       git_url: "https://#{ENV['MATCH_GIT_TOKEN']}:x-oauth-basic@github.com/your-repo/fastlane-match-repo.git",
+#       readonly: false  # Temporarily disable readonly to create certificates
+#     )
+
+#     # mapping = Actions.lane_context[SharedValues::MATCH_PROVISIONING_PROFILE_MAPPING]
+#     # upload_code_signing_settings(
+#     #   profile_name: mapping[ENV['MATCH_APP_IDENTIFIER']]
+#     # )
+#   end
+
+#   desc "Build the iOS binary"
+#   lane :build do
+#     signing  # Sync code signing before building
+#     gym      # gym is the default fastlane action to build an iOS app
+#   end
+
+#   desc "Release the app to the App Store"
+#   lane :release do
+#     build    # Build the app before releasing
+#     deliver  # Upload the app to the App Store using deliver
+#   end
+# end
+
+# lane :deploy_all do
+#   signing
+#   build
+#   release
+# end
+
+
+
+
+
+
+
+
+
+# # Create a Developer Portal and App Store Connect
+# desc "Create a Developer Portal and App Store Connect entry"
+# lane :create_app do
+#   create_app_online # produce
+# end
+
+# platform :ios do
+#   # Sync signing certificates and provisioning profiles from the git repo
+#   desc "Sync code signing certificates and provisioning profiles"
+#   lane :signing do
+#     sync_code_signing # match
+   
+#     # mapping = Actions.lane_context[
+#     #   SharedValues::MATCH_PROVISIONING_PROFILE_MAPPING
+#     # ]
+#     # upload_code_signing_settings(
+#     #   profile_name: mapping[ENV['MATCH_APP_IDENTIFIER']]
+#     # )
+#   end
+
+#   # Build the iOS app
+#   desc "Build the iOS binary"
+#   lane :build do
+#     signing  # Sync code signing before building
+#     gym      # gym is the default fastlane action to build an iOS app
+#   end
+
+#   # Release the app to the App Store
+#   desc "Release the app to the App Store"
+#   lane :release do
+#     build    # Build the app before releasing
+#     deliver  # Upload the app to the App Store using deliver
+#   end
+# end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# lane :create_app do
+#   produce(
+#     username: ENV['FASTLANE_USER'],  # Your Apple ID email
+#     app_identifier: "com.dhuntleyinc.expoapptemplate",
+#     app_name: "Expo App Template",
+#     sku: "dhuntleyinc_expoapptemplate_001",
+#     platform: "ios",
+#     language: "English",
+#     team_id: ENV['APPLE_TEAM_ID']  # Optional, if you're part of multiple teams
+#   )
+# end
+
+# platform :ios do
+#   desc "Sync code signing certificates and provisioning profiles"
+#   lane :signing do
+#     # sync_code_signing # match
+#     sync_code_signing(
+#       # username: ENV['PRODUCE_USERNAME'],
+#       username: ENV['FASTLANE_USER'],
+#       # password: ENV['FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD'],
+#       type: "appstore",  
+#       git_url: "https://github.com/dhuntleypro/fastlane-match-repo.git", 
+#       readonly: false  # Temporarily disable readonly to create certificates
+#     )
+#     mapping = Actions.lane_context[
+#       SharedValues::MATCH_PROVISIONING_PROFILE_MAPPING
+#     ]
+#     upload_code_signing_settings(
+#       profile_name: mapping[ENV['MATCH_APP_IDENTIFIER']]
+#     )
+
+#     # git_url = "https://#{ENV['MATCH_GIT_TOKEN']}:x-oauth-basic@github.com/dhuntleypro/fastlane-match-repo.git"
+#     # match(type: "appstore", git_url: git_url)
+#   end
+
+
+
+
+
+
+
+
+# # Create a Developer Portal and App Store Connect
+# desc "Create a Developer Portal and App Store Connect entry"
+# lane :create_app do
+#   #create_app_online # produce
+#   UI.message "Step 1 completed"
+ 
+#   produce(
+#     username: ENV['FASTLANE_USER'],  # Your Apple ID email
+#     app_identifier: "com.dhuntleyinc.expoapptemplate",
+#     app_name: "Expo App Template",
+#     sku: "dhuntleyinc_expoapptemplate_001",
+#     platform: "ios",
+#     language: "English",
+#     team_id: ENV['APPLE_TEAM_ID'],  # Add your Team ID here, mandatory if part of multiple teams
+#     skip_itc: false,  # Set to true if you want to skip creating the app in App Store Connect
+#     skip_devcenter: false  # Set to true if you want to skip creating the app in the Developer Portal
+#   )
+# end
+
+# platform :ios do
+#   before_all do
+#     Dotenv.load ".env.ios"
+#     UI.message "Step 2 completed"
+#   end
+
+#   desc "Sync code signing certificates and provisioning profiles"
+#   lane :signing do
+#     UI.message "Step 3 completed"
+
+#     # sync_code_signing # match
+#     # UI.message "Step 4 completed"
+
+#     # sync_code_signing(
+#     #   username: ENV['FASTLANE_USER'],
+#     #   type: "appstore",
+#     #   git_url: "https://#{ENV['MATCH_GIT_TOKEN']}:x-oauth-basic@github.com/your-repo/fastlane-match-repo.git",
+#     #   readonly: false  # Temporarily disable readonly to create certificates
+#     # )
+
+#     # mapping = Actions.lane_context[SharedValues::MATCH_PROVISIONING_PROFILE_MAPPING]
+#     # UI.message "Step 5 completed"
+
+#     # upload_code_signing_settings(
+#     #   profile_name: mapping[ENV['MATCH_APP_IDENTIFIER']]
+#     # )
+#     # UI.message "Step 6 completed"
+#     match(
+#       type: "appstore",
+#       app_identifier: ["com.dhuntleyinc.expoapptemplate"],
+#       username: ENV["FASTLANE_USER"],
+#       # git_url = "https://#{ENV['MATCH_GIT_TOKEN']}:x-oauth-basic@github.com/dhuntleypro/fastlane-match-repo.git",
+
+#       git_url: "https://github.com/dhuntleypro/fastlane-match-repo.git",
+#       team_id: ENV["APPLE_TEAM_ID"],
+#       readonly: false,
+#       force: true,
+#       keychain_name: "login.keychain",
+#       git_basic_authorization: ENV["MATCH_GIT_BASIC_AUTHORIZATION"],
+#       # clone_branch_directly: true  # Speed up the clone process
+    
+#     )
+#     UI.message "Step 4 completed next is build"
+
+#   end
+
+#   desc "Build the iOS binary"
+#   lane :build do
+#     signing  # Sync code signing before building
+#     gym(
+#       scheme: "expoapptemplate",
+#       clean: true,
+#       export_method: "app-store"
+#     )
+#   end
+
+#   desc "Release the app to the App Store"
+#   lane :release do
+#     # build    # Build the app before releasing
+#     # deliver  # Upload the app to the App Store using deliver
+#     build_app(scheme: "expoapptemplate")  # Build your iOS app
+
+#     upload_to_app_store(  # Upload the build to App Store Connect
+#       username: ENV["FASTLANE_USER"],
+#       app_identifier: "com.dhuntleyinc.expoapptemplate",
+#       team_id: ENV["APPLE_TEAM_ID"]
+#     )
+#   end
+# end
+
+# lane :deploy_all do
+#   signing
+#   build
+#   release
+# end
+
+
+
+
+
+
+
+
+
+# # Create a Developer Portal and App Store Connect
+# desc "Create a Developer Portal and App Store Connect entry"
+# lane :create_app do
+#   create_app_online # produce
+# end
+
+# platform :ios do
+#   # Sync signing certificates and provisioning profiles from the git repo
+#   desc "Sync code signing certificates and provisioning profiles"
+#   lane :signing do
+#     sync_code_signing # match
+   
+#     # mapping = Actions.lane_context[
+#     #   SharedValues::MATCH_PROVISIONING_PROFILE_MAPPING
+#     # ]
+#     # upload_code_signing_settings(
+#     #   profile_name: mapping[ENV['MATCH_APP_IDENTIFIER']]
+#     # )
+#   end
+
+#   # Build the iOS app
+#   desc "Build the iOS binary"
+#   lane :build do
+#     signing  # Sync code signing before building
+#     gym      # gym is the default fastlane action to build an iOS app
+#   end
+
+#   # Release the app to the App Store
+#   desc "Release the app to the App Store"
+#   lane :release do
+#     build    # Build the app before releasing
+#     deliver  # Upload the app to the App Store using deliver
+#   end
+# end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# lane :create_app do
+#   produce(
+#     username: ENV['FASTLANE_USER'],  # Your Apple ID email
+#     app_identifier: "com.dhuntleyinc.expoapptemplate",
+#     app_name: "Expo App Template",
+#     sku: "dhuntleyinc_expoapptemplate_001",
+#     platform: "ios",
+#     language: "English",
+#     team_id: ENV['APPLE_TEAM_ID']  # Optional, if you're part of multiple teams
+#   )
+# end
+
+# platform :ios do
+#   desc "Sync code signing certificates and provisioning profiles"
+#   lane :signing do
+#     # sync_code_signing # match
+#     sync_code_signing(
+#       # username: ENV['PRODUCE_USERNAME'],
+#       username: ENV['FASTLANE_USER'],
+#       # password: ENV['FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD'],
+#       type: "appstore",  
+#       git_url: "https://github.com/dhuntleypro/fastlane-match-repo.git", 
+#       readonly: false  # Temporarily disable readonly to create certificates
+#     )
+#     mapping = Actions.lane_context[
+#       SharedValues::MATCH_PROVISIONING_PROFILE_MAPPING
+#     ]
+#     upload_code_signing_settings(
+#       profile_name: mapping[ENV['MATCH_APP_IDENTIFIER']]
+#     )
+
+#     # git_url = "https://#{ENV['MATCH_GIT_TOKEN']}:x-oauth-basic@github.com/dhuntleypro/fastlane-match-repo.git"
+#     # match(type: "appstore", git_url: git_url)
+#   end
+
+
+
+
+
+
+
+# # Create a Developer Portal and App Store Connect
+# desc "Create a Developer Portal and App Store Connect entry"
+# lane :create_app do
+#   produce(
+#     username: ENV['FASTLANE_USER'],  # Your Apple ID email
+#     app_identifier: "com.dhuntleyinc.expoapptemplate",
+#     app_name: "Expo App Template",
+#     sku: "dhuntleyinc_expoapptemplate_001",
+#     platform: "ios",
+#     language: "English",
+#     team_id: ENV['APPLE_TEAM_ID'],  # Add your Team ID here, mandatory if part of multiple teams
+#     skip_itc: false,  # Set to true if you want to skip creating the app in App Store Connect
+#     skip_devcenter: false  # Set to true if you want to skip creating the app in the Developer Portal
+#   )
+#     UI.message "Step 1 Completed "
+
+# end
+
+# platform :ios do
+#   before_all do
+#     Dotenv.load ".env.ios"
+#      UI.message "Step 2 Env File Aquired"
+#   end
+
+#   desc "Sync code signing certificates and provisioning profiles"
+#   lane :signing do
+#     # sync_code_signing # match
+#     sync_code_signing(
+#       username: ENV['FASTLANE_USER'],
+#       type: "appstore",
+#       git_url: "https://#{ENV['MATCH_GIT_TOKEN']}:x-oauth-basic@github.com/your-repo/fastlane-match-repo.git",
+#       readonly: false  # Temporarily disable readonly to create certificates
+#     )
+#     UI.message "Step 3 signing"
+
+#     mapping = Actions.lane_context[SharedValues::MATCH_PROVISIONING_PROFILE_MAPPING]
+    
+#     UI.message "Step 4 mapping"
+
+#     upload_code_signing_settings(
+#       profile_name: mapping[ENV['MATCH_APP_IDENTIFIER']]
+#     )
+
+#     UI.message "Step 5 upload_code_signing_settings"
+
+#   end
+
+#   desc "Build the iOS binary"
+#   lane :build do
+#     signing  # Sync code signing before building
+#     gym      # gym is the default fastlane action to build an iOS app
+#   end
+
+#   desc "Release the app to the App Store"
+#   lane :release do
+#     build    # Build the app before releasing
+#     deliver  # Upload the app to the App Store using deliver
+#   end
+# end
+
+# lane :deploy_all do
+#   create_app
+#   signing
+#   build
+#   release
+# end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# # Create a Developer Portal and App Store Connect
+# desc "Create a Developer Portal and App Store Connect entry"
+# lane :create_app do
+#   create_app_online # produce
+#     produce(
+#     username: ENV['FASTLANE_USER'],  # Your Apple ID email
+#     app_identifier: "com.dhuntleyinc.expoapptemplate",
+#     app_name: "Expo App Template",
+#     sku: "dhuntleyinc_expoapptemplate_001",
+#     platform: "ios",
+#     language: "English",
+#     team_id: ENV['APPLE_TEAM_ID']  # Optional, if you're part of multiple teams
+#   )
+
+# end
+
+# # Create a Developer Portal and App Store Connect entry
+# desc "Create a Developer Portal and App Store Connect entry"
+# lane :create_app do
+#   UI.message "Starting to create App Store Connect and Developer Portal entry..."
+#   produce(
+#     username: ENV['FASTLANE_USER'],  # Your Apple ID email
+#     app_identifier: "com.dhuntleyinc.expoapptemplate",
+#     app_name: "Expo App Template",
+#     sku: "dhuntleyinc_expoapptemplate_001",
+#     platform: "ios",
+#     language: "English",
+#     team_id: ENV['APPLE_TEAM_ID']  # Optional, if you're part of multiple teams
+#   )
+#   UI.success "App Store Connect and Developer Portal entry created successfully!"
+# end
+
+# platform :ios do
+#   before_all do
+#     UI.message "Loading environment variables..."
+#     Dotenv.load ".env.ios"  # Load your .env.ios file for sensitive credentials
+#     UI.success "Environment variables loaded successfully!"
+#   end
+
+#   desc "Sync code signing certificates and provisioning profiles"
+#   lane :signing do
+#     UI.message "Starting to sync code signing certificates and provisioning profiles..."
+#     sync_code_signing(  # Sync code signing using match
+#       username: ENV['FASTLANE_USER'],
+#       type: "appstore",
+#       git_url: "https://#{ENV['MATCH_GIT_TOKEN']}:x-oauth-basic@github.com/your-repo/fastlane-match-repo.git",
+#       readonly: false  # Temporarily disable readonly to create certificates
+#     )
+#     UI.success "Code signing certificates and provisioning profiles synced!"
+#   end
+
+#   desc "Release the app to the App Store"
+#   lane :release do
+#     UI.message "Starting app release process..."
+    
+#     UI.message "Setting up App Store Connect API Key..."
+#     app_store_connect_api_key(
+#       key_id: "HVI5YC18WLLM",           # Replace with your actual key_id
+#       issuer_id: "SNW84Q39QZ",          # Replace with your actual issuer_id
+#       key_filepath: "../ApiKey_HVI5YC18WLLM.p8"  # Correctly provide the path to your .p8 file
+#     )
+#     UI.success "App Store Connect API Key configured!"
+
+#     UI.message "Fetching distribution certificates and provisioning profiles..."
+#     match(type: "appstore")  # Ensure it fetches distribution certificates and profiles
+#     UI.success "Certificates and provisioning profiles fetched!"
+
+#     UI.message "Building the iOS app..."
+#     build_app(  # Build the app using the correct Xcode scheme
+#       scheme: "expoapptemplate",  # Replace with your actual scheme name
+#       export_method: "app-store",  # Ensure app-store export for production builds
+#       clean: true
+#     )
+#     UI.success "iOS app built successfully!"
+
+#     UI.message "Uploading the app to App Store Connect..."
+#     upload_to_app_store(  # Upload to App Store
+#       skip_metadata: false,        # Set to false to fill out metadata
+#       skip_screenshots: true,      # Set to true if you want to skip uploading screenshots
+#       app_version: "1.0.0",        # Adjust the app version accordingly
+#       submit_for_review: true      # Automatically submit the app for review
+#     )
+#     UI.success "App uploaded and submitted for review!"
+#   end
+# end
+
+
+
+
+
+
+
+
+
+
+
+
+
+# # # Create a Developer Portal and App Store Connect
+# # desc "Create a Developer Portal and App Store Connect entry"
+# # lane :create_app do
+# #   create_app_online # produce
+# #     produce(
+# #     username: ENV['FASTLANE_USER'],  # Your Apple ID email
+# #     app_identifier: "com.dhuntleyinc.expoapptemplate",
+# #     app_name: "Expo App Template",
+# #     sku: "dhuntleyinc_expoapptemplate_001",
+# #     platform: "ios",
+# #     language: "English",
+# #     team_id: ENV['APPLE_TEAM_ID']  # Optional, if you're part of multiple teams
+# #   )
+
+# # end
+
+# # Create a Developer Portal and App Store Connect
+# desc "Create a Developer Portal and App Store Connect entry"
+# lane :create_app do
+#   produce(
+#     username: ENV['FASTLANE_USER'],  # Your Apple ID email
+#     app_identifier: "com.dhuntleyinc.expoapptemplate",
+#     app_name: "Expo App Template",
+#     sku: "dhuntleyinc_expoapptemplate_001",
+#     platform: "ios",
+#     language: "English",
+#     team_id: ENV['APPLE_TEAM_ID'],  # Add your Team ID here, mandatory if part of multiple teams
+#     skip_itc: false,  # Set to true if you want to skip creating the app in App Store Connect
+#     skip_devcenter: false  # Set to true if you want to skip creating the app in the Developer Portal
+#   )
+# end
+
+# platform :ios do
+#   before_all do
+#     Dotenv.load ".env.ios"
+#   end
+
+#   desc "Sync code signing certificates and provisioning profiles"
+#   lane :signing do
+#     # sync_code_signing # match
+#     sync_code_signing(
+#       username: ENV['FASTLANE_USER'],
+#       type: "appstore",
+#       git_url: "https://#{ENV['MATCH_GIT_TOKEN']}:x-oauth-basic@github.com/your-repo/fastlane-match-repo.git",
+#       readonly: false  # Temporarily disable readonly to create certificates
+#     )
+
+#     # mapping = Actions.lane_context[SharedValues::MATCH_PROVISIONING_PROFILE_MAPPING]
+#     # upload_code_signing_settings(
+#     #   profile_name: mapping[ENV['MATCH_APP_IDENTIFIER']]
+#     # )
+#   end
+
+#   desc "Build the iOS binary"
+#   lane :build do
+#     signing  # Sync code signing before building
+#     gym      # gym is the default fastlane action to build an iOS app
+#   end
+
+#   desc "Release the app to the App Store"
+#   lane :release do
+#     build    # Build the app before releasing
+#     deliver  # Upload the app to the App Store using deliver
+#   end
+# end
+
+# lane :deploy_all do
+#   signing
+#   build
+#   release
+# end
+
+
+
+
+
+
+
+
+
+# # Create a Developer Portal and App Store Connect
+# desc "Create a Developer Portal and App Store Connect entry"
+# lane :create_app do
+#   create_app_online # produce
+# end
+
+# platform :ios do
+#   # Sync signing certificates and provisioning profiles from the git repo
+#   desc "Sync code signing certificates and provisioning profiles"
+#   lane :signing do
+#     sync_code_signing # match
+   
+#     # mapping = Actions.lane_context[
+#     #   SharedValues::MATCH_PROVISIONING_PROFILE_MAPPING
+#     # ]
+#     # upload_code_signing_settings(
+#     #   profile_name: mapping[ENV['MATCH_APP_IDENTIFIER']]
+#     # )
+#   end
+
+#   # Build the iOS app
+#   desc "Build the iOS binary"
+#   lane :build do
+#     signing  # Sync code signing before building
+#     gym      # gym is the default fastlane action to build an iOS app
+#   end
+
+#   # Release the app to the App Store
+#   desc "Release the app to the App Store"
+#   lane :release do
+#     build    # Build the app before releasing
+#     deliver  # Upload the app to the App Store using deliver
+#   end
+# end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# lane :create_app do
+#   produce(
+#     username: ENV['FASTLANE_USER'],  # Your Apple ID email
+#     app_identifier: "com.dhuntleyinc.expoapptemplate",
+#     app_name: "Expo App Template",
+#     sku: "dhuntleyinc_expoapptemplate_001",
+#     platform: "ios",
+#     language: "English",
+#     team_id: ENV['APPLE_TEAM_ID']  # Optional, if you're part of multiple teams
+#   )
+# end
+
+# platform :ios do
+#   desc "Sync code signing certificates and provisioning profiles"
+#   lane :signing do
+#     # sync_code_signing # match
+#     sync_code_signing(
+#       # username: ENV['PRODUCE_USERNAME'],
+#       username: ENV['FASTLANE_USER'],
+#       # password: ENV['FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD'],
+#       type: "appstore",  
+#       git_url: "https://github.com/dhuntleypro/fastlane-match-repo.git", 
+#       readonly: false  # Temporarily disable readonly to create certificates
+#     )
+#     mapping = Actions.lane_context[
+#       SharedValues::MATCH_PROVISIONING_PROFILE_MAPPING
+#     ]
+#     upload_code_signing_settings(
+#       profile_name: mapping[ENV['MATCH_APP_IDENTIFIER']]
+#     )
+
+#     # git_url = "https://#{ENV['MATCH_GIT_TOKEN']}:x-oauth-basic@github.com/dhuntleypro/fastlane-match-repo.git"
+#     # match(type: "appstore", git_url: git_url)
+#   end
