@@ -103,7 +103,7 @@ jobs:
       - name: Add GitHub Secrets 9
         env:
           GH_TOKEN: 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
-          SECRET_VALUE: false
+          SECRET_VALUE: true
         run: |
           gh secret set APP_CREATED -b "$SECRET_VALUE" -R $GITHUB_REPOSITORY
 
