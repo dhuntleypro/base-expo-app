@@ -7,20 +7,42 @@ on:
 
 jobs:
   # add token
+  # auth_user:
+  #   runs-on: macos-latest
+    
+  #   steps:
+      
+  #     - name: Configure npm to use GitHub token for private packages
+  #       env:
+  #         GH_TOKEN: ${{ secrets.GH_TOKEN }} # GitHub token from secrets
+  #       run: |
+  #         echo "Authenticating GitHub CLI..."
+  #         gh auth login --with-token <<< "$GH_TOKEN"
+  #         echo "//npm.pkg.github.com/:_authToken=${{ secrets.GH_TOKEN }}" >> ~/.npmrc
+  #         echo "@dhuntleypro:registry=https://npm.pkg.github.com" >> ~/.npmrc
+
   auth_user:
     runs-on: macos-latest
-    
-    steps:
-      
-      - name: Configure npm to use GitHub token for private packages
-        env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }} # GitHub token from secrets
-        run: |
-          echo "Authenticating GitHub CLI..."
-          gh auth login --with-token <<< "$GH_TOKEN"
-          echo "//npm.pkg.github.com/:_authToken=${{ secrets.GH_TOKEN }}" >> ~/.npmrc
-          echo "@dhuntleypro:registry=https://npm.pkg.github.com" >> ~/.npmrc
 
+    steps:
+      # Step 1: Set up AWS credentials
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      # Step 2: Retrieve secrets from AWS Secrets Manager
+      - name: Retrieve GitHub Token from AWS Secrets Manager
+        id: github_token
+        run: |
+          GH_TOKEN=$(aws secretsmanager get-secret-value --secret-id /my-app/github-token --query SecretString --output text)
+          echo "GH_TOKEN=${GH_TOKEN}" >> $GITHUB_ENV
+
+      # Step 3: Use the retrieved GitHub token
+      - name: Authenticate GitHub CLI
+        run: gh auth login --with-token <<< "$GH_TOKEN"
 
   # Add secrets
   add_secrets:
@@ -138,7 +160,6 @@ jobs:
 
   build:
     runs-on: macos-latest
-    needs: [add_secrets]
     steps:
       # Step 1: Check out the code from the repository
       - name: Checkout code
@@ -160,7 +181,7 @@ jobs:
           echo "//npm.pkg.github.com/:_authToken=${{ secrets.GH_TOKEN }}" >> ~/.npmrc
 
       # Step 4: Install project dependencies
-      - name: Install dependencies 
+      - name: Install dependencies
         run: npm install
 
       # Step 5: Install EAS CLI (if using Expo and EAS)
@@ -171,31 +192,7 @@ jobs:
       - name: Install Fastlane
         run: gem install fastlane
 
-      # Step 7: Check if the app has already been created (via GitHub secret)
-      - name: Check if App is Created
-        id: check_app_created
-        run: |
-          if [ "${{ secrets.APP_CREATED }}" == "true" ]; then
-            echo "App already created."
-            echo "APP_EXISTS=true" >> $GITHUB_ENV
-          else
-            echo "App not created."
-            echo "APP_EXISTS=false" >> $GITHUB_ENV
-          fi
-
-      # Step 8: Create App if not already created
-      - name: Create App (if necessary)
-        if: env.APP_EXISTS == 'false'
-        run: |
-          bundle exec fastlane produce --app_identifier com.dhuntleyinc.baseexpoapp
-          gh secret set APP_CREATED -b "true" -R ${{ github.repository }}
-        env:
-          FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
-          FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
-          APP_IDENTIFIER: ${{ secrets.APP_IDENTIFIER }}
-          APP_EXISTS: ${{ secrets.APP_EXISTS }}
-
-      # Step 9: Match Code Signing with Fastlane
+      # Step 7: Match Code Signing with Fastlane
       - name: Match Code Signing with Fastlane
         run: bundle exec fastlane match appstore
         env:
@@ -204,13 +201,13 @@ jobs:
           FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
           FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
 
-      # Step 10: Build the iOS app
+      # Step 8: Build the iOS app
       - name: Build iOS App
         run: bundle exec fastlane gym --scheme baseexpoapp
         env:
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
 
-      # Step 11: Upload the app to App Store Connect
+      # Step 9: Upload the app to App Store Connect
       - name: Upload to App Store Connect
         run: bundle exec fastlane upload_to_app_store
         env:
@@ -218,7 +215,7 @@ jobs:
           FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
 
-      # Step 12: Deploy using Fastlane (Optional)
+      # Step 10: Deploy using Fastlane (Optional)
       - name: Deploy All with Fastlane
         run: bundle exec fastlane deploy_all --verbose
         env:
@@ -227,6 +224,85 @@ jobs:
           MATCH_GIT_TOKEN: ${{ secrets.MATCH_GIT_TOKEN }}
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+
+  # build:
+  #   runs-on: macos-latest
+  #   #  needs: [add_secrets]
+  #   steps:
+  #     # Step 1: Check out the code from the repository
+  #     - name: Checkout code
+  #       uses: actions/checkout@v2
+
+  #     # Step 2: Set up Node.js
+  #     - name: Set up Node.js
+  #       uses: actions/setup-node@v3
+  #       with:
+  #         node-version: '18'
+  #         registry-url: https://registry.npmjs.org
+
+  #     # Step 3: Configure npm to use GitHub token for private packages
+  #     - name: Configure npm to use GitHub token
+  #       env:
+  #         GH_TOKEN: ${{ secrets.GH_TOKEN }} # GitHub token from secrets
+  #       run: |
+  #         echo "@dhuntleypro:registry=https://npm.pkg.github.com/" > ~/.npmrc
+  #         echo "//npm.pkg.github.com/:_authToken=${{ secrets.GH_TOKEN }}" >> ~/.npmrc
+
+  #     # Step 4: Install project dependencies
+  #     - name: Install dependencies 
+  #       run: npm install
+
+  #     # Step 5: Install EAS CLI (if using Expo and EAS)
+  #     - name: Install EAS CLI
+  #       run: npm install -g eas-cli
+
+  #     # Step 6: Install Fastlane
+  #     - name: Install Fastlane
+  #       run: gem install fastlane
+
+  #     # Step 7: Check if the app has already been created (via GitHub secret)
+  #     # Step 8: Create App if not already created
+  #     # - name: Create App (if necessary)
+  #     #   run: |
+  #     #     bundle exec fastlane produce --app_identifier com.dhuntleyinc.baseexpoapp
+  #     #   env:
+  #     # FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
+  #     # FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
+  #     # APP_IDENTIFIER: ${{ secrets.APP_IDENTIFIER }}
+  #     # APP_EXISTS: ${{ secrets.APP_EXISTS }}
+
+  #     # Step 9: Match Code Signing with Fastlane
+  #     - name: Match Code Signing with Fastlane
+  #       run: bundle exec fastlane match appstore
+  #       env:
+  #         MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+  #         GIT_URL: https://github.com/dhuntleypro/fastlane-match-repo.git
+  #         FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
+  #         FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
+
+  #     # Step 10: Build the iOS app
+  #     - name: Build iOS App
+  #       run: bundle exec fastlane gym --scheme baseexpoapp
+  #       env:
+  #         MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+
+  #     # Step 11: Upload the app to App Store Connect
+  #     - name: Upload to App Store Connect
+  #       run: bundle exec fastlane upload_to_app_store
+  #       env:
+  #         FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
+  #         FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
+  #         MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+
+  #     # Step 12: Deploy using Fastlane (Optional)
+  #     - name: Deploy All with Fastlane
+  #       run: bundle exec fastlane deploy_all --verbose
+  #       env:
+  #         FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
+  #         FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
+  #         MATCH_GIT_TOKEN: ${{ secrets.MATCH_GIT_TOKEN }}
+  #         MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+  #         APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
 
   # build:
   #   runs-on: macos-latest
