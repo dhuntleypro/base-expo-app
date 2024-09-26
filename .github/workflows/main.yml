@@ -16,6 +16,8 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }} # GitHub token from secrets
         run: |
+          echo "Authenticating GitHub CLI..."
+          gh auth login --with-token <<< "$GH_TOKEN"
           echo "//npm.pkg.github.com/:_authToken=${{ secrets.GH_TOKEN }}" >> ~/.npmrc
           echo "@dhuntleypro:registry=https://npm.pkg.github.com" >> ~/.npmrc
 
