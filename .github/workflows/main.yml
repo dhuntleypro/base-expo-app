@@ -87,12 +87,14 @@ jobs:
           SECRET_VALUE: $MATCH_PASSWORD
         run: |
           gh secret set MATCH_PASSWORD -b "$SECRET_VALUE" -R $GITHUB_REPOSITORY
-   
+
+
+
   build:
     runs-on: macos-latest
 
     steps:
-    # Step 1: Check out the code from the repository
+      # Step 1: Check out the code from the repository
       - name: Checkout code
         uses: actions/checkout@v2
 
@@ -119,18 +121,15 @@ jobs:
       - name: Install EAS CLI
         run: npm install -g eas-cli
 
-      # Step 6: Install Fastlane and set up Ruby environment
+      # Step 6: Install Fastlane
       - name: Install Fastlane
-        run: |
-          gem install bundler
-          bundle update --bundler
-          bundle install
+        run: gem install fastlane
 
       # Step 7: Check if the app already exists in App Store Connect
       - name: Check if App Exists
         id: check_app
         run: |
-          if fastlane produce --app_identifier com.dhuntleyinc.baseexpoapp -q; then
+          if bundle exec fastlane produce --app_identifier com.dhuntleyinc.baseexpoapp; then
             echo "App already exists"
             echo "APP_EXISTS=true" >> $GITHUB_ENV
           else
@@ -144,7 +143,7 @@ jobs:
       # Step 8: Create App (if necessary)
       - name: Create App (if necessary)
         if: env.APP_EXISTS == 'false'
-        run: fastlane produce
+        run: bundle exec fastlane produce
         env:
           FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
           FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
@@ -152,7 +151,7 @@ jobs:
 
       # Step 9: Match Code Signing with Fastlane
       - name: Match Code Signing with Fastlane
-        run: fastlane match appstore
+        run: bundle exec fastlane match appstore
         env:
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
           GIT_URL: https://github.com/dhuntleypro/fastlane-match-repo.git
@@ -161,13 +160,13 @@ jobs:
 
       # Step 10: Build the iOS app
       - name: Build iOS App
-        run: fastlane gym --scheme baseexpoapp
+        run: bundle exec fastlane gym --scheme baseexpoapp
         env:
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
 
       # Step 11: Upload the app to App Store Connect
       - name: Upload to App Store Connect
-        run: fastlane upload_to_app_store
+        run: bundle exec fastlane upload_to_app_store
         env:
           FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
           FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
@@ -175,13 +174,109 @@ jobs:
 
       # Step 12: Deploy using Fastlane (Optional)
       - name: Deploy All with Fastlane
-        run: fastlane deploy_all --verbose
+        run: bundle exec fastlane deploy_all --verbose
         env:
           FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
           FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
           MATCH_GIT_TOKEN: ${{ secrets.MATCH_GIT_TOKEN }}
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+
+
+  # build:
+  #   runs-on: macos-latest
+
+  #   steps:
+  #   # Step 1: Check out the code from the repository
+  #     - name: Checkout code
+  #       uses: actions/checkout@v2
+
+  #     # Step 2: Set up Node.js
+  #     - name: Set up Node.js
+  #       uses: actions/setup-node@v3
+  #       with:
+  #         node-version: '16'
+  #         registry-url: https://registry.npmjs.org
+
+  #     # Step 3: Configure npm to use GitHub token for private packages
+  #     - name: Configure npm to use GitHub token
+  #       env:
+  #         GH_TOKEN: ${{ secrets.GH_TOKEN }} # GitHub token from secrets
+  #       run: |
+  #         echo "@dhuntleypro:registry=https://npm.pkg.github.com/" > ~/.npmrc
+  #         echo "//npm.pkg.github.com/:_authToken=${{ secrets.GH_TOKEN }}" >> ~/.npmrc
+
+  #     # Step 4: Install project dependencies
+  #     - name: Install dependencies 
+  #       run: npm install
+
+  #     # Step 5: Install EAS CLI (if using Expo and EAS)
+  #     - name: Install EAS CLI
+  #       run: npm install -g eas-cli
+
+  #     # Step 6: Install Fastlane and set up Ruby environment
+  #     - name: Install Fastlane
+  #       run: |
+  #         gem install bundler
+  #         bundle update --bundler
+  #         bundle install
+
+  #     # Step 7: Check if the app already exists in App Store Connect
+  #     - name: Check if App Exists
+  #       id: check_app
+  #       run: |
+  #         if fastlane produce --app_identifier com.dhuntleyinc.baseexpoapp -q; then
+  #           echo "App already exists"
+  #           echo "APP_EXISTS=true" >> $GITHUB_ENV
+  #         else
+  #           echo "App does not exist, creating..."
+  #           echo "APP_EXISTS=false" >> $GITHUB_ENV
+  #         fi
+  #       env:
+  #         FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
+  #         FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
+
+  #     # Step 8: Create App (if necessary)
+  #     - name: Create App (if necessary)
+  #       if: env.APP_EXISTS == 'false'
+  #       run: fastlane produce
+  #       env:
+  #         FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
+  #         FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
+  #         APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+
+  #     # Step 9: Match Code Signing with Fastlane
+  #     - name: Match Code Signing with Fastlane
+  #       run: fastlane match appstore
+  #       env:
+  #         MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+  #         GIT_URL: https://github.com/dhuntleypro/fastlane-match-repo.git
+  #         FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
+  #         FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
+
+  #     # Step 10: Build the iOS app
+  #     - name: Build iOS App
+  #       run: fastlane gym --scheme baseexpoapp
+  #       env:
+  #         MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+
+  #     # Step 11: Upload the app to App Store Connect
+  #     - name: Upload to App Store Connect
+  #       run: fastlane upload_to_app_store
+  #       env:
+  #         FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
+  #         FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
+  #         MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+
+  #     # Step 12: Deploy using Fastlane (Optional)
+  #     - name: Deploy All with Fastlane
+  #       run: fastlane deploy_all --verbose
+  #       env:
+  #         FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
+  #         FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
+  #         MATCH_GIT_TOKEN: ${{ secrets.MATCH_GIT_TOKEN }}
+  #         MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+  #         APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
 
 
 

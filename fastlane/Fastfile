@@ -1,28 +1,31 @@
-# Fastfile
 default_platform(:ios)
 
 platform :ios do
-  # This lane will create the app on App Store Connect, build, and deploy it
   desc "Create the app on App Store Connect, build and deploy"
   lane :deploy_all do
     begin
-      # Step 1: Create the app on App Store Connect if it doesn't exist
-      produce(
-        username: "dhuntleypro@icloud.com",  # Your Apple ID email
-        app_identifier: "com.dhuntleyinc.baseexpoapp",  # Bundle ID of your app
-        app_name: "base expo app",  # Name of your app
-        sku: "baseexpoapp_001",  # Unique SKU for the app
-        platform: "ios",
-        language: "English",  # Language for the app listing
-        team_id: ENV['APPLE_TEAM_ID'],  # Your Apple Developer Team ID
-        skip_itc: false,  # Create the app in App Store Connect
-        skip_devcenter: false  # Create the app in the Developer Portal
-      )
+      # Step 1: Check if the app already exists in App Store Connect
+      if app_already_exists
+        UI.message("App already exists in App Store Connect, skipping app creation.")
+      else
+        UI.message("Creating the app in App Store Connect...")
+        produce(
+          username: "dhuntleypro@icloud.com",  # Your Apple ID email
+          app_identifier: "com.dhuntleyinc.baseexpoapp",  # Bundle ID of your app
+          app_name: "base expo app",  # Name of your app
+          sku: "baseexpoapp_001",  # Unique SKU for the app
+          platform: "ios",
+          language: "English",  # Language for the app listing
+          team_id: ENV['APPLE_TEAM_ID'],  # Your Apple Developer Team ID
+          skip_itc: false,  # Create the app in App Store Connect
+          skip_devcenter: false  # Create the app in the Developer Portal
+        )
+      end
 
-      # Step 2: Handle code signing (no encryption_password needed)
+      # Step 2: Handle code signing
       match(
         type: "appstore",
-        readonly: false, # true # true will Only use existing certificates and profiles, don't create new ones
+        readonly: true,  # Use existing certificates and profiles, don't create new ones
         git_url: "https://github.com/dhuntleypro/fastlane-match-repo.git",  # GitHub repo storing certificates
         app_identifier: ["com.dhuntleyinc.baseexpoapp"],  # Specify the app identifier to avoid prompts
         username: ENV['FASTLANE_USER'],
@@ -54,7 +57,93 @@ platform :ios do
       raise e  # Re-raise the error so Fastlane knows the process failed
     end
   end
+
+  private_lane :app_already_exists do
+    # Checks if the app already exists on App Store Connect
+    begin
+      app = Spaceship::Tunes::Application.find("com.dhuntleyinc.baseexpoapp")
+      return !app.nil?
+    rescue
+      return false
+    end
+  end
 end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# # Fastfile
+# default_platform(:ios)
+
+# platform :ios do
+#   # This lane will create the app on App Store Connect, build, and deploy it
+#   desc "Create the app on App Store Connect, build and deploy"
+#   lane :deploy_all do
+#     begin
+#       # Step 1: Create the app on App Store Connect if it doesn't exist
+#       produce(
+#         username: "dhuntleypro@icloud.com",  # Your Apple ID email
+#         app_identifier: "com.dhuntleyinc.baseexpoapp",  # Bundle ID of your app
+#         app_name: "base expo app",  # Name of your app
+#         sku: "baseexpoapp_001",  # Unique SKU for the app
+#         platform: "ios",
+#         language: "English",  # Language for the app listing
+#         team_id: ENV['APPLE_TEAM_ID'],  # Your Apple Developer Team ID
+#         skip_itc: false,  # Create the app in App Store Connect
+#         skip_devcenter: false  # Create the app in the Developer Portal
+#       )
+
+#       # Step 2: Handle code signing (no encryption_password needed)
+#       match(
+#         type: "appstore",
+#         readonly: false, # true # true will Only use existing certificates and profiles, don't create new ones
+#         git_url: "https://github.com/dhuntleypro/fastlane-match-repo.git",  # GitHub repo storing certificates
+#         app_identifier: ["com.dhuntleyinc.baseexpoapp"],  # Specify the app identifier to avoid prompts
+#         username: ENV['FASTLANE_USER'],
+#         keychain_name: "login.keychain",  # Store the certs in macOS Keychain
+#         keychain_password: ENV['FASTLANE_PASSWORD']  # Keychain password (for CI environments)
+#       )
+
+#       # Step 3: Build the iOS app
+#       gym(
+#         scheme: "baseexpoapp",
+#         export_method: "app-store"  # Build for App Store
+#       )
+
+#       # Step 4: Upload the build to App Store Connect
+#       upload_to_app_store(
+#         skip_screenshots: true,  # Skips screenshots during the upload process
+#         skip_metadata: true,  # Skips metadata during the upload process
+#         automatic_release: false,  # Set to true if you want automatic release
+#         app_identifier: "com.dhuntleyinc.baseexpoapp",
+#         username: "dhuntleypro@icloud.com"
+#       )
+
+#       # Step 5: If everything succeeds, print the success message
+#       UI.success("Success! Created and deployed the app to App Store Connect 🎉")
+    
+#     rescue => e
+#       # If there is an error, print an error message
+#       UI.error("An error occurred during deployment: #{e.message}")
+#       raise e  # Re-raise the error so Fastlane knows the process failed
+#     end
+#   end
+# end
 
 
 
