@@ -6,10 +6,24 @@ on:
       - main
 
 jobs:
+  # add token
+  auth_user:
+    runs-on: macos-latest
+    
+    steps:
+      
+      - name: Configure npm to use GitHub token for private packages
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }} # GitHub token from secrets
+        run: |
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.GH_TOKEN }}" >> ~/.npmrc
+          echo "@dhuntleypro:registry=https://npm.pkg.github.com" >> ~/.npmrc
+
+
   # Add secrets
   add_secrets:
     runs-on: macos-latest
-    
+    needs: [auth_user]
     steps:
       # Step 2: Install GitHub CLI
       - name: Install GitHub CLI
@@ -25,13 +39,6 @@ jobs:
       #     GH_TOKEN=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 
       #     gh auth login --with-token 
       #     unset GH_TOKEN
-      - name: Configure npm to use GitHub token for private packages
-        env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }} # GitHub token from secrets
-        run: |
-          echo "//npm.pkg.github.com/:_authToken=${{ secrets.GH_TOKEN }}" >> ~/.npmrc
-          echo "@dhuntleypro:registry=https://npm.pkg.github.com" >> ~/.npmrc
-    
 
   
         # gh auth login --with-token
