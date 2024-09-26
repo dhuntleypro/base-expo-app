@@ -1,0 +1,596 @@
+# name: Build and Deploy iOS App
+
+# on:
+#   push:
+#     branches:
+#       - main
+
+# jobs:
+#   # Add secrets
+#   add_secrets:
+#     runs-on: macos-latest
+    
+#     steps:
+#       - name: Add GitHub Secrets 1
+#         env:
+#           GH_TOKEN: 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
+#           SECRET_VALUE: $APP_STORE_CONNECT_API_KEY_KEY_ID
+#         run: |
+#           gh secret set APP_STORE_CONNECT_API_KEY_KEY_ID -b "$SECRET_VALUE" -R $GITHUB_REPOSITORY 
+      
+#       - name: Add GitHub Secrets 2
+#         env:
+#           GH_TOKEN: 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
+#           SECRET_VALUE: $APP_STORE_CONNECT_API_KEY_ISSUER_ID
+#         run: | 
+#           gh secret set APP_STORE_CONNECT_API_KEY_ISSUER_ID -b "$SECRET_VALUE" -R $GITHUB_REPOSITORY
+      
+#       - name: Add GitHub Secrets 3
+#         env:
+#           GH_TOKEN: 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
+#           SECRET_VALUE: $APP_STORE_CONNECT_P8_BASE64
+#         run: |
+#           gh secret set APP_STORE_CONNECT_P8_BASE64 -b "$SECRET_VALUE" -R $GITHUB_REPOSITORY 
+      
+#       - name: Add GitHub Secrets 4
+#         env:
+#           GH_TOKEN: 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
+#           SECRET_VALUE: $FASTLANE_USER
+#         run: |
+#           gh secret set FASTLANE_USER -b "$SECRET_VALUE" -R $GITHUB_REPOSITORY
+      
+#       - name: Add GitHub Secrets 5
+#         env:
+#           GH_TOKEN: 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
+#           SECRET_VALUE: $FASTLANE_PASSWORD
+#         run: |
+#           gh secret set FASTLANE_PASSWORD -b "$SECRET_VALUE" -R $GITHUB_REPOSITORY 
+      
+#       - name: Add GitHub Secrets 5
+#         env:
+#           GH_TOKEN: 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
+#           SECRET_VALUE: $FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD
+#         run: |
+#           gh secret set FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD -b "$SECRET_VALUE" -R $GITHUB_REPOSITORY 
+      
+#       - name: Add GitHub Secrets 6
+#         env:
+#           GH_TOKEN: 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
+#           SECRET_VALUE: $APPLE_TEAM_ID
+#         run: |
+#           gh secret set APPLE_TEAM_ID -b "$SECRET_VALUE" -R $GITHUB_REPOSITORY
+      
+#       - name: Add GitHub Secrets 7
+#         env:
+#           GH_TOKEN: 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
+#           SECRET_VALUE: $EXPO_USERNAME
+#         run: |
+#           gh secret set EXPO_USERNAME -b "$SECRET_VALUE" -R $GITHUB_REPOSITORY
+  
+#       - name: Add GitHub Secrets 8
+#         env:
+#           GH_TOKEN: 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
+#           SECRET_VALUE: $EXPO_PASSWORD
+#         run: |
+#           gh secret set EXPO_PASSWORD -b "$SECRET_VALUE" -R $GITHUB_REPOSITORY
+      
+#       - name: Add GitHub Secrets 9
+#         env:
+#           GH_TOKEN: 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
+#           SECRET_VALUE: $MATCH_GIT_TOKEN
+#         run: |
+#           gh secret set MATCH_GIT_TOKEN -b "$SECRET_VALUE" -R $GITHUB_REPOSITORY
+   
+#   build:
+#     runs-on: macos-latest
+
+#     steps:
+#     - name: Checkout code
+#       uses: actions/checkout@v2
+
+#     - name: Set up Node.js
+#       # uses: actions/setup-node@v2
+#       uses: actions/setup-node@v3
+
+#       with:
+#         node-version: '16'
+#         registry-url: https://registry.npmjs.org
+
+    
+#     - name: Configure npm to use GitHub token
+#       env:
+#         GH_TOKEN: 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
+#       run: |
+#         echo "@dhuntleypro:registry=https://npm.pkg.github.com/" > ~/.npmrc
+#         echo "//npm.pkg.github.com/:_authToken=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" >> ~/.npmrc
+  
+#     - name: Install dependencies 
+#       run: npm install
+#       env:
+#         GH_TOKEN: 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
+#         GIT_TOKEN: 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
+
+
+#     # Install Expo CLI to resolve "expo command not found" error
+#     - name: Install Expo CLI
+#       run: npm install -g expo-cli
+
+#     # Install EAS CLI for the new build process
+#     - name: Install EAS CLI
+#       run: npm install -g eas-cli
+
+#     - name: Install Fastlane
+#       run: |
+#         gem install bundler
+#         bundle update --bundler
+#         bundle install
+
+#     - name: Log in to Expo
+#       run: expo login --username dhuntleypro@gmail.com --password Dontrush@321
+
+#     - name: EAS Build iOS
+#       run: npx eas build -p ios --non-interactive
+#       env:
+#         EAS_BUILD_PROFILE: production
+#         APPLE_ID: ${{ secrets.APPLE_ID }}
+#         APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD }}
+#         APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+#         NODE_AUTH_TOKEN: ${{ github.token }}  # Use the built-in GITHUB_TOKEN provided by GitHub Actions
+
+
+#     - name: Run Fastlane deploy
+#       run: fastlane deploy_all --verbose
+#       env:
+#         FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
+#         FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
+#         MATCH_GIT_TOKEN: ${{ secrets.MATCH_GIT_TOKEN }}
+#         APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# name: CI Workflow
+
+# on:
+#   push:
+#     branches:
+#       - main
+
+# jobs:
+#   # Add secrets
+#   add_secrets:
+#     runs-on: macos-latest
+    
+#     steps:
+#       - name: Add GitHub Secrets 1
+#         env:
+#           GH_TOKEN: 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
+#           SECRET_VALUE: $APP_STORE_CONNECT_API_KEY_KEY_ID
+#         run: |
+#           gh secret set APP_STORE_CONNECT_API_KEY_KEY_ID -b "$SECRET_VALUE" -R $GITHUB_REPOSITORY 
+      
+#       - name: Add GitHub Secrets 2
+#         env:
+#           GH_TOKEN: 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
+#           SECRET_VALUE: $APP_STORE_CONNECT_API_KEY_ISSUER_ID
+#         run: | 
+#           gh secret set APP_STORE_CONNECT_API_KEY_ISSUER_ID -b "$SECRET_VALUE" -R $GITHUB_REPOSITORY
+      
+#       - name: Add GitHub Secrets 3
+#         env:
+#           GH_TOKEN: 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
+#           SECRET_VALUE: $APP_STORE_CONNECT_P8_BASE64
+#         run: |
+#           gh secret set APP_STORE_CONNECT_P8_BASE64 -b "$SECRET_VALUE" -R $GITHUB_REPOSITORY 
+      
+#       - name: Add GitHub Secrets 4
+#         env:
+#           GH_TOKEN: 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
+#           SECRET_VALUE: $FASTLANE_USER
+#         run: |
+#           gh secret set FASTLANE_USER -b "$SECRET_VALUE" -R $GITHUB_REPOSITORY
+      
+#       - name: Add GitHub Secrets 5
+#         env:
+#           GH_TOKEN: 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
+#           SECRET_VALUE: $FASTLANE_PASSWORD
+#         run: |
+#           gh secret set FASTLANE_PASSWORD -b "$SECRET_VALUE" -R $GITHUB_REPOSITORY 
+      
+#       - name: Add GitHub Secrets 6
+#         env:
+#           GH_TOKEN: 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
+#           SECRET_VALUE: $APPLE_TEAM_ID
+#         run: |
+#           gh secret set APPLE_TEAM_ID -b "$SECRET_VALUE" -R $GITHUB_REPOSITORY
+   
+
+#   # First Job: Setup
+#   setup:
+#     runs-on: macos-latest
+#     needs: add_secrets
+#     steps:
+#       # Checkout the repository
+#       - uses: actions/checkout@v2
+
+#       # Set up Node.js
+#       - uses: actions/setup-node@v2
+#         with:
+#           node-version: '18.17'
+
+#       - name: Install npm dependencies
+#         run: npm install
+
+#       - name: Install GitHub CLI if necessary
+#         run: |
+#           brew install gh
+        
+#       - name: Install OpenSSL if necessary
+#         run: |
+#           brew info openssl
+
+#   # Check Environment Variables
+#   check_env:
+#     runs-on: macos-latest
+#     needs: setup
+#     steps:
+#       - name: Check required environment variables
+#         run: |
+#           REQUIRED_VARS=("FASTLANE_USER" "MATCH_PASSWORD" "MATCH_GIT_TOKEN" "APPLE_TEAM_ID" "APP_STORE_CONNECT_API_KEY_KEY_ID" "APP_STORE_CONNECT_API_KEY_ISSUER_ID")
+#           for VAR in "${REQUIRED_VARS[@]}"; do
+#             if [ -z "${!VAR}" ]; then
+#               echo "Error: Environment variable $VAR is not set."
+#               exit 1
+#             else
+#               echo "Environment variable $VAR is set."
+#             fi
+#           done
+#         env:
+#           FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
+#           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+#           MATCH_GIT_TOKEN: ${{ secrets.MATCH_GIT_TOKEN }}
+#           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+#           APP_STORE_CONNECT_API_KEY_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_KEY_ID }}
+#           APP_STORE_CONNECT_API_KEY_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ISSUER_ID }}
+
+#   # Second Job: Deployment depends on Setup
+#   deploy:
+#     runs-on: macos-latest
+#     needs: check_env  # This ensures that 'deploy' runs only after 'setup' is complete.
+#     steps:
+#       - uses: actions/checkout@v2  # This line was incorrectly indented
+#       - name: Decode App Store Connect p8 key
+#         run: echo "${{ secrets.APP_STORE_CONNECT_P8_BASE64 }}" | base64 --decode > ApiKey_HVI5YC18WLLM.p8
+#       - name: Set Permissions on p8 File
+#         run: chmod 600 ApiKey_HVI5YC18WLLM.p8
+
+#       - name: Debug Environment Variables
+#         run: |
+#           echo "Key ID: ${APP_STORE_CONNECT_API_KEY_KEY_ID}"
+#           echo "Issuer ID: ${APP_STORE_CONNECT_ISSUER_ID}"
+#           echo "Length Key ID: ${#APP_STORE_CONNECT_API_KEY_KEY_ID}"
+#           echo "Length Issuer ID: ${#APP_STORE_CONNECT_ISSUER_ID}"
+#         env:
+#           APP_STORE_CONNECT_API_KEY_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_KEY_ID }}
+#           APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
+            
+#       - name: Install Bundler if necessary
+#         run: |
+#           if ! gem list bundler -i > /dev/null; then
+#             gem install bundler
+#           fi
+
+#       - name: Check and update Fastlane
+#         run: |
+#           if ! gem list fastlane -i > /dev/null; then
+#             gem install fastlane
+#           else
+#             gem update fastlane
+#           fi
+
+#       - name: Run Fastlane to deploy
+#         env:
+#           FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
+#           FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
+#           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+#           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+#           APP_STORE_CONNECT_API_KEY_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_KEY_ID }}
+#           APP_STORE_CONNECT_API_KEY_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ISSUER_ID }}
+#           APP_STORE_CONNECT_P8_BASE64: ${{ secrets.APP_STORE_CONNECT_P8_BASE64 }}
+#         run: |
+#           fastlane client_deploy_production_app_store
+#           fastlane client_deploy_production_beta
+#           fastlane client_deploy_staging_beta
+
+
+
+# # ios client_deploy_production_app_store, ios client_deploy_production_beta, ios client_deploy_staging_beta, ios desktop_deploy_appstore, ios run_all_tests, ios load_provision_profiles_ios_staging, ios load_provision_profiles_ios_production, ios create_provision_profiles_ios_staging, ios create_provision_profiles_ios_production, ios login_another_user, ios git_setup_user, ios git_commit_push, ios git_tag_push, ios version_increment_patch, mac create_provision_profiles_mac_production
+
+
+
+
+
+
+
+
+
+#  - uses: actions/checkout@v2
+
+#       # Set up Node.js environment
+#       - name: Set up Node.js
+#         uses: actions/setup-node@v2
+#         with:
+#           node-version: '18.17'
+
+#       # Install npm dependencies
+#       - name: Install npm dependencies
+#         run: npm install
+
+#       # Install GitHub CLI
+#       - name: Install GitHub CLI
+#         run: |
+#           brew install gh
+#           brew update
+#           brew upgrade openssl
+
+
+
+
+
+
+
+
+
+
+
+# name: CI Workflow
+
+# on:
+#   push:
+#     branches:
+#       - main
+
+# jobs:
+
+#   # Add secrets
+#   add_secrets:
+#     runs-on: macos-latest
+    
+#     steps:
+#       - name: Add GitHub Secrets 1
+#         env:
+#           GH_TOKEN: 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
+#           SECRET_VALUE: $APP_STORE_CONNECT_API_KEY_KEY_ID
+#         run: |
+#           gh secret set APP_STORE_CONNECT_API_KEY_KEY_ID -b "$SECRET_VALUE" -R $GITHUB_REPOSITORY 
+      
+#       - name: Add GitHub Secrets 2
+#         env:
+#           GH_TOKEN: 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
+#           SECRET_VALUE: $APP_STORE_CONNECT_API_KEY_ISSUER_ID
+#         run: | 
+#           gh secret set APP_STORE_CONNECT_API_KEY_ISSUER_ID -b "$SECRET_VALUE" -R $GITHUB_REPOSITORY
+      
+#       - name: Add GitHub Secrets 3
+#         env:
+#           GH_TOKEN: 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
+#           SECRET_VALUE: $APP_STORE_CONNECT_P8_BASE64
+#         run: |
+#           gh secret set APP_STORE_CONNECT_P8_BASE64 -b "$SECRET_VALUE" -R $GITHUB_REPOSITORY 
+      
+#       - name: Add GitHub Secrets 4
+#         env:
+#           GH_TOKEN: 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
+#           SECRET_VALUE: $FASTLANE_USER
+#         run: |
+#           gh secret set FASTLANE_USER -b "$SECRET_VALUE" -R $GITHUB_REPOSITORY
+      
+#       - name: Add GitHub Secrets 5
+#         env:
+#           GH_TOKEN: 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
+#           SECRET_VALUE: $FASTLANE_PASSWORD
+#         run: |
+#           gh secret set FASTLANE_PASSWORD -b "$SECRET_VALUE" -R $GITHUB_REPOSITORY 
+      
+#       - name: Add GitHub Secrets 6
+#         env:
+#           GH_TOKEN: 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
+#           SECRET_VALUE: $APPLE_TEAM_ID
+#         run: |
+#           gh secret set APPLE_TEAM_ID -b "$SECRET_VALUE" -R $GITHUB_REPOSITORY
+
+#   # First Job: Setup
+#   setup:
+#     runs-on: macos-latest
+#     needs: add_secrets
+#       steps:
+#       # Checkout the repository
+#       - uses: actions/checkout@v2
+
+#       # Set up Node.js environment
+#       - name: Set up Node.js
+#         uses: actions/setup-node@v2
+#         with:
+#           node-version: '18.17'
+
+#       # Install npm dependencies
+#       - name: Install npm dependencies
+#         run: npm install
+
+#       # Install GitHub CLI
+#       - name: Install GitHub CLI
+#         run: brew install gh
+  
+#   # Check
+#   check_env:
+#       runs-on: macos-latest
+#       needs: setup
+#       steps:
+#         - name: Check required environment variables
+#           run: |
+#             REQUIRED_VARS=("FASTLANE_USER" "MATCH_PASSWORD" "MATCH_GIT_TOKEN" "APPLE_TEAM_ID" "APP_STORE_CONNECT_API_KEY_KEY_ID" "APP_STORE_CONNECT_API_KEY_ISSUER_ID")
+#             for VAR in "${REQUIRED_VARS[@]}"; do
+#               if [ -z "${!VAR}" ]; then
+#                 echo "Error: Environment variable $VAR is not set."
+#                 exit 1
+#               else
+#                 echo "Environment variable $VAR is set."
+#               fi
+#             done
+#           env:
+#             FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
+#             MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+#             MATCH_GIT_TOKEN: ${{ secrets.MATCH_GIT_TOKEN }}
+#             APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+#             APP_STORE_CONNECT_API_KEY_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_KEY_ID }}
+#             APP_STORE_CONNECT_API_KEY_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ISSUER_ID }}
+
+#   # Second Job: Deployment depends on Setup
+#   deploy:
+#     runs-on: macos-latest
+#     needs: check_env  # This ensures that 'deploy' runs only after 'setup' is complete.
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v2
+
+#       - name: Decode App Store Connect p8 key
+#         run: |
+#           echo "${{ secrets.APP_STORE_CONNECT_P8_BASE64 }}" | base64 --decode > ApiKey_HVI5YC18WLLM.p8
+
+#       - name: Install Bundler
+#         run: gem install bundler
+
+#       - name: Install gems
+#         run: bundle install
+
+#       - name: Run Fastlane to deploy
+#         env:
+#           FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
+#           FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
+#           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+#           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+#           APP_STORE_CONNECT_API_KEY_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_KEY_ID }}
+#           APP_STORE_CONNECT_API_KEY_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ISSUER_ID }}
+#           APP_STORE_CONNECT_P8_BASE64: ${{ secrets.APP_STORE_CONNECT_P8_BASE64 }}
+#         run: |
+#           bundle exec fastlane beta
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# name: Deploy to TestFlight or App Store
+
+# on:
+#   push:
+#     branches:
+#       - main  # Run this action on push to the main branch
+
+# jobs:
+#   build:
+#     runs-on: macos-latest
+
+#     steps:
+#       # Checkout the repository
+#       - uses: actions/checkout@v2
+
+#       # Set up Node.js environment (if required for your project)
+#       - name: Set up Node.js
+#         uses: actions/setup-node@v2
+#         with:
+#           node-version: '18.17'
+
+#       # Install npm dependencies (if required for your project)
+#       - name: Install npm dependencies
+#         run: npm install
+
+#       # Install GitHub CLI
+#       - name: Install GitHub CLI
+#         run: brew install gh
+    
+#       # # Decode the p8 key from GitHub Secret
+#       # - name: Decode the App Store Connect .p8 key
+#       #   run: |
+#       #     echo "${{ secrets.APP_STORE_P8_KEY_BASE64 }}" | base64 --decode > ApiKey_HVI5YC18WLLM.p8
+           
+#       # Add GitHub Secrets
+     
+#       # Check required environment variables
+#       - name: Check required environment variables
+#         run: |
+#           REQUIRED_VARS=("FASTLANE_USER" "MATCH_PASSWORD" "MATCH_GIT_TOKEN" "APPLE_TEAM_ID" "APP_STORE_CONNECT_API_KEY_KEY_ID" "APP_STORE_CONNECT_API_KEY_ISSUER_ID")
+#           for VAR in "${REQUIRED_VARS[@]}"; do
+#             if [ -z "${!VAR}" ]; then
+#               echo "Error: Environment variable $VAR is not set."
+#               exit 1
+#             else
+#               echo "Environment variable $VAR is set."
+#             fi
+#           done
+#         env:
+#           FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
+#           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+#           MATCH_GIT_TOKEN: ${{ secrets.MATCH_GIT_TOKEN }}
+#           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+#           APP_STORE_CONNECT_API_KEY_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_KEY_ID }}
+#           APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
+      
+#       # Authenticate and run Fastlane
+#       - name: Run Fastlane to deploy
+#         run: fastlane beta
+#         env:
+#           FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
+#           FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
+#           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+#           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+#           APP_STORE_CONNECT_API_KEY_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_KEY_ID }}
+#           APP_STORE_CONNECT_API_KEY_ISSUER_ID : ${{ secrets.APP_STORE_CONNECT_API_KEY_ISSUER_ID }}
+#           APP_STORE_CONNECT_P8_BASE64: ${{ secrets.APP_STORE_CONNECT_P8_BASE64 }}
+
+#       # Optional: Post-deployment notification (e.g., Slack)
+#       - name: Post Deployment Notification
+#         if: success()
+#         run: |
+#           echo "Deployment to TestFlight or App Store successful!"
+
+
+
+
+
+
