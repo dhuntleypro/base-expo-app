@@ -95,6 +95,13 @@ jobs:
         run: |
           gh secret set APP_CREATED -b "$SECRET_VALUE" -R $GITHUB_REPOSITORY
 
+      - name: Add GitHub Secrets 9
+        env:
+          GH_TOKEN: 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
+          SECRET_VALUE: APP_IDENTIFIER
+        run: |
+          gh secret set APP_IDENTIFIER -b "$SECRET_VALUE" -R $GITHUB_REPOSITORY
+
   build:
     runs-on: macos-latest
 
