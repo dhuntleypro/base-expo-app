@@ -5,3 +5,16 @@ type("appstore") # The type of certificates (appstore, development, adhoc, enter
 # Uncomment the following lines if you need them
 storage_mode("git") # Use git storage mode
 # git_branch("master") # The branch to use in the git repo
+
+
+app_identifier(["com.dhuntleyinc.baseexpoapp"])  # Update with your bundle ID
+
+# Team settings
+username(ENV['FASTLANE_USER'])
+team_id(ENV['APPLE_TEAM_ID'])
+
+# Keychain settings
+keychain_name("login.keychain")
+keychain_password(ENV['FASTLANE_PASSWORD'])
+
+readonly(false)  # Set to false so Fastlane can create new certificates if needed

@@ -196,7 +196,7 @@ jobs:
       - name: Match Code Signing with Fastlane
         run: bundle exec fastlane match appstore
         env:
-          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+          MATCH_PASSWORD: "Sharktank@2547"
           GIT_URL: https://github.com/dhuntleypro/fastlane-match-repo.git
           FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
           FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
@@ -205,7 +205,7 @@ jobs:
       - name: Build iOS App
         run: bundle exec fastlane gym --scheme baseexpoapp
         env:
-          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+          MATCH_PASSWORD: "Sharktank@2547"
 
       # Step 9: Upload the app to App Store Connect
       - name: Upload to App Store Connect
@@ -213,7 +213,7 @@ jobs:
         env:
           FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
           FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
-          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+          MATCH_PASSWORD: "Sharktank@2547"
 
       # Step 10: Deploy using Fastlane (Optional)
       - name: Deploy All with Fastlane
@@ -222,7 +222,7 @@ jobs:
           FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
           FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
           MATCH_GIT_TOKEN: ${{ secrets.MATCH_GIT_TOKEN }}
-          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+          MATCH_PASSWORD: "Sharktank@2547"
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
 
   # build:
@@ -275,7 +275,7 @@ jobs:
   #     - name: Match Code Signing with Fastlane
   #       run: bundle exec fastlane match appstore
   #       env:
-  #         MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+  #         MATCH_PASSWORD: "Sharktank@2547"
   #         GIT_URL: https://github.com/dhuntleypro/fastlane-match-repo.git
   #         FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
   #         FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
@@ -284,7 +284,7 @@ jobs:
   #     - name: Build iOS App
   #       run: bundle exec fastlane gym --scheme baseexpoapp
   #       env:
-  #         MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+  #         MATCH_PASSWORD: "Sharktank@2547"
 
   #     # Step 11: Upload the app to App Store Connect
   #     - name: Upload to App Store Connect
@@ -292,7 +292,7 @@ jobs:
   #       env:
   #         FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
   #         FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
-  #         MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+  #         MATCH_PASSWORD: "Sharktank@2547"
 
   #     # Step 12: Deploy using Fastlane (Optional)
   #     - name: Deploy All with Fastlane
@@ -301,7 +301,7 @@ jobs:
   #         FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
   #         FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
   #         MATCH_GIT_TOKEN: ${{ secrets.MATCH_GIT_TOKEN }}
-  #         MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+  #         MATCH_PASSWORD: "Sharktank@2547"
   #         APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
 
   # build:
@@ -370,7 +370,7 @@ jobs:
   #     - name: Match Code Signing with Fastlane
   #       run: fastlane match appstore
   #       env:
-  #         MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+  #         MATCH_PASSWORD: "Sharktank@2547"
   #         GIT_URL: https://github.com/dhuntleypro/fastlane-match-repo.git
   #         FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
   #         FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
@@ -379,7 +379,7 @@ jobs:
   #     - name: Build iOS App
   #       run: fastlane gym --scheme baseexpoapp
   #       env:
-  #         MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+  #         MATCH_PASSWORD: "Sharktank@2547"
 
   #     # Step 11: Upload the app to App Store Connect
   #     - name: Upload to App Store Connect
@@ -387,7 +387,7 @@ jobs:
   #       env:
   #         FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
   #         FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
-  #         MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+  #         MATCH_PASSWORD: "Sharktank@2547"
 
   #     # Step 12: Deploy using Fastlane (Optional)
   #     - name: Deploy All with Fastlane
@@ -396,7 +396,7 @@ jobs:
   #         FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
   #         FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
   #         MATCH_GIT_TOKEN: ${{ secrets.MATCH_GIT_TOKEN }}
-  #         MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+  #         MATCH_PASSWORD: "Sharktank@2547"
   #         APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
 
 
@@ -445,7 +445,7 @@ jobs:
   #       - name: Match Code Signing with Fastlane
   #       run: fastlane match appstore
   #       env:
-  #         MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+  #         MATCH_PASSWORD: "Sharktank@2547"
   #         GIT_URL: https://github.com/dhuntleypro/fastlane-match-repo.git
   #         FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
   #         FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
@@ -453,12 +453,12 @@ jobs:
   #     - name: Build iOS App
   #       run: fastlane gym --scheme baseexpoapp
   #       env:
-  #         MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+  #         MATCH_PASSWORD: "Sharktank@2547"
   
   #     - name: Upload to App Store Connect
   #       run: fastlane upload_to_app_store
   #       env:
-  #         MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+  #         MATCH_PASSWORD: "Sharktank@2547"
   #         FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
   #         FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
   #   # Step 7: Run Fastlane to build and deploy the app
@@ -468,7 +468,7 @@ jobs:
   #       FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
   #       FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
   #       MATCH_GIT_TOKEN: ${{ secrets.MATCH_GIT_TOKEN }}
-  #       MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+  #       MATCH_PASSWORD: "Sharktank@2547"
   #       APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
 
 
@@ -585,7 +585,7 @@ jobs:
 #           done
 #         env:
 #           FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
-#           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+#           MATCH_PASSWORD: "Sharktank@2547"
 #           MATCH_GIT_TOKEN: ${{ secrets.MATCH_GIT_TOKEN }}
 #           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
 #           APP_STORE_CONNECT_API_KEY_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_KEY_ID }}
@@ -630,7 +630,7 @@ jobs:
 #         env:
 #           FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
 #           FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
-#           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+#           MATCH_PASSWORD: "Sharktank@2547"
 #           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
 #           APP_STORE_CONNECT_API_KEY_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_KEY_ID }}
 #           APP_STORE_CONNECT_API_KEY_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ISSUER_ID }}
@@ -777,7 +777,7 @@ jobs:
 #             done
 #           env:
 #             FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
-#             MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+#             MATCH_PASSWORD: "Sharktank@2547"
 #             MATCH_GIT_TOKEN: ${{ secrets.MATCH_GIT_TOKEN }}
 #             APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
 #             APP_STORE_CONNECT_API_KEY_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_KEY_ID }}
@@ -805,7 +805,7 @@ jobs:
 #         env:
 #           FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
 #           FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
-#           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+#           MATCH_PASSWORD: "Sharktank@2547"
 #           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
 #           APP_STORE_CONNECT_API_KEY_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_KEY_ID }}
 #           APP_STORE_CONNECT_API_KEY_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ISSUER_ID }}
@@ -883,7 +883,7 @@ jobs:
 #           done
 #         env:
 #           FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
-#           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+#           MATCH_PASSWORD: "Sharktank@2547"
 #           MATCH_GIT_TOKEN: ${{ secrets.MATCH_GIT_TOKEN }}
 #           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
 #           APP_STORE_CONNECT_API_KEY_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_KEY_ID }}
@@ -895,7 +895,7 @@ jobs:
 #         env:
 #           FASTLANE_USER: ${{ secrets.FASTLANE_USER }}
 #           FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
-#           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+#           MATCH_PASSWORD: "Sharktank@2547"
 #           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
 #           APP_STORE_CONNECT_API_KEY_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_KEY_ID }}
 #           APP_STORE_CONNECT_API_KEY_ISSUER_ID : ${{ secrets.APP_STORE_CONNECT_API_KEY_ISSUER_ID }}

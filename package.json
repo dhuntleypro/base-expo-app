@@ -8,7 +8,8 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "test": "jest --watchAll",
-    "gh-login": "echo $GH_TOKEN | gh auth login --with-token" 
+    "gh-login": "echo $GH_TOKEN | gh auth login --with-token" ,
+    "create-certificate": "fastlane match appstore --readonly false"
   },
   "jest": {
     "preset": "jest-expo"
