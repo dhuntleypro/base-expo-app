@@ -12,10 +12,10 @@ jobs:
       # Step 1: Add GitHub Secrets using GitHub CLI
       - name: Add GitHub Secrets
         env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
-          SECRET_VALUE: ${{ secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD }}
+          GH_TOKEN: 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
+          SECRET_VALUE: ${{ secrets.APP_STORE_CONNECT_API_KEY_KEY_ID }}
         run: |
-          gh secret set FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD -b "$SECRET_VALUE" -R $GITHUB_REPOSITORY
+          gh secret set APP_STORE_CONNECT_API_KEY_KEY_ID -b "$SECRET_VALUE" -R $GITHUB_REPOSITORY
 
   build:
     runs-on: macos-latest
@@ -85,8 +85,6 @@ jobs:
           MATCH_GIT_TOKEN: ${{ secrets.MATCH_GIT_TOKEN }}
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
-
-
 
 
 
