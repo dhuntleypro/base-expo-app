@@ -4,7 +4,7 @@ type("appstore") # The type of certificates (appstore, development, adhoc, enter
 
 # Uncomment the following lines if you need them
 storage_mode("git") # Use git storage mode
-# git_branch("master") # The branch to use in the git repo
+git_branch("main") # The branch to use in the git repo
 
 
 app_identifier(["com.dhuntleyinc.baseexpoapp"])  # Update with your bundle ID

@@ -47,16 +47,16 @@ platform :ios do
   desc "Handle code signing for the iOS app"
   lane :handle_code_signing do
     # Set up keychain partition list for code signing
-    set_keychain_partition_list
+    # set_keychain_partition_list
 
     match(
       type: "appstore",
-      readonly: false, # Set to false if you want to create a new certificate
+      readonly: true, # Set to false if you want to create a new certificate
       git_url: "https://github.com/dhuntleypro/fastlane-match-repo.git",  # GitHub repo storing certificates
       app_identifier: ["com.dhuntleyinc.baseexpoapp"],
       username: "dhuntleypro@icloud.com",  # Apple ID email
       keychain_name: "login.keychain",  # Store certs in Keychain
-      keychain_password: 'Sharktank@2547',  # Use keychain password from .env
+      keychain_password: '2547' , #"Sharktank@2547",  # Use keychain password from .env
       force_for_new_certificates: true,  # Prevent unnecessary creation of new certificates
       git_branch: 'main'  # Ensure correct branch
     )
@@ -86,8 +86,8 @@ platform :ios do
 
   desc "Set keychain partition list to avoid permission prompts during code signing"
   lane :set_keychain_partition_list do
-    sh("security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k Sharktank@2547 /Users/huntley/Library/Keychains/login.keychain-db")
-    UI.message("set_keychain_partition_list.......")
+    # sh("security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k Sharktank@2547 /Users/huntley/Library/Keychains/login.keychain-db")
+    # UI.message("set_keychain_partition_list.......")
   end
 
   # Updated method to use Spaceship::ConnectAPI to check if the app exists

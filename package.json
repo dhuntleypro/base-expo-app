@@ -9,7 +9,8 @@
     "web": "expo start --web",
     "test": "jest --watchAll",
     "gh-login": "echo $GH_TOKEN | gh auth login --with-token" ,
-    "create-certificate": "fastlane match appstore --readonly false"
+    "create-certificate": "fastlane match appstore --readonly false",
+    "import-cert": "security import priv_key.p12 -k ~/Library/Keychains/login.keychain // not used"
   },
   "jest": {
     "preset": "jest-expo"
