@@ -6,41 +6,16 @@ on:
       - main
 
 jobs:
-  # auth_user:
-  #   runs-on: macos-latest
-
-  #   steps:
-  #     # Step 1: Authenticate GitHub CLI
-  #     - name: Authenticate GitHub CLI
-  #       run: gh auth login --with-token <<< "${{ secrets.GH_TOKEN }}"
-
   add_secrets:
     runs-on: macos-latest
-    # needs: [auth_user]
     steps:
-      # Step 1: Add GitHub Secrets in a loop
+      # Step 1: Add GitHub Secrets using GitHub CLI
       - name: Add GitHub Secrets
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          SECRET_VALUE: ${{ secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD }}
         run: |
-          declare -A secrets
-          secrets["APP_STORE_CONNECT_API_KEY_KEY_ID"]=$APP_STORE_CONNECT_API_KEY_KEY_ID
-          secrets["APP_STORE_CONNECT_API_KEY_ISSUER_ID"]=$APP_STORE_CONNECT_API_KEY_ISSUER_ID
-          secrets["APP_STORE_CONNECT_P8_BASE64"]=$APP_STORE_CONNECT_P8_BASE64
-          secrets["FASTLANE_USER"]=$FASTLANE_USER
-          secrets["FASTLANE_PASSWORD"]=$FASTLANE_PASSWORD
-          secrets["FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD"]=$FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD
-          secrets["APPLE_TEAM_ID"]=$APPLE_TEAM_ID
-          secrets["EXPO_USERNAME"]=$EXPO_USERNAME
-          secrets["EXPO_PASSWORD"]=$EXPO_PASSWORD
-          secrets["MATCH_GIT_TOKEN"]=$MATCH_GIT_TOKEN
-          secrets["MATCH_PASSWORD"]=$MATCH_PASSWORD
-          secrets["APP_CREATED"]=true
-          secrets["APP_IDENTIFIER"]=$APP_IDENTIFIER
-
-          for key in "${!secrets[@]}"; do
-            gh secret set "$key" -b "${secrets[$key]}" -R $GITHUB_REPOSITORY
-          done
+          gh secret set FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD -b "$SECRET_VALUE" -R $GITHUB_REPOSITORY
 
   build:
     runs-on: macos-latest
@@ -110,9 +85,6 @@ jobs:
           MATCH_GIT_TOKEN: ${{ secrets.MATCH_GIT_TOKEN }}
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
-
-
-
 
 
 
