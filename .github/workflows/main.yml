@@ -10,24 +10,9 @@ jobs:
     runs-on: macos-latest
 
     steps:
-      # Step 1: Set up AWS credentials
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
-
-      # Step 2: Retrieve GitHub Token from AWS Secrets Manager
-      - name: Retrieve GitHub Token from AWS Secrets Manager
-        id: github_token
-        run: |
-          GH_TOKEN=$(aws secretsmanager get-secret-value --secret-id /my-app/github-token --query SecretString --output text)
-          echo "GH_TOKEN=${GH_TOKEN}" >> $GITHUB_ENV
-
-      # Step 3: Authenticate GitHub CLI
+      # Step 1: Authenticate GitHub CLI
       - name: Authenticate GitHub CLI
-        run: gh auth login --with-token <<< "$GH_TOKEN"
+        run: gh auth login --with-token <<< "${{ secrets.GH_TOKEN }}"
 
   add_secrets:
     runs-on: macos-latest
@@ -125,12 +110,6 @@ jobs:
           MATCH_GIT_TOKEN: ${{ secrets.MATCH_GIT_TOKEN }}
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
-
-
-
-
-
-
 
 
 
