@@ -6,17 +6,17 @@ on:
       - main
 
 jobs:
-  auth_user:
-    runs-on: macos-latest
+  # auth_user:
+  #   runs-on: macos-latest
 
-    steps:
-      # Step 1: Authenticate GitHub CLI
-      - name: Authenticate GitHub CLI
-        run: gh auth login --with-token <<< "${{ secrets.GH_TOKEN }}"
+  #   steps:
+  #     # Step 1: Authenticate GitHub CLI
+  #     - name: Authenticate GitHub CLI
+  #       run: gh auth login --with-token <<< "${{ secrets.GH_TOKEN }}"
 
   add_secrets:
     runs-on: macos-latest
-    needs: [auth_user]
+    # needs: [auth_user]
     steps:
       # Step 1: Add GitHub Secrets in a loop
       - name: Add GitHub Secrets
